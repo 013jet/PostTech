@@ -1,0 +1,217 @@
+{
+  "generatedAt": "2026-10-17T14:34:36.878Z",
+  "source": {
+    "path": "C:/Users/nitro/Downloads/Jana_Post_Terricon_Hackathon_2026 1.pdf",
+    "challenge": "02 Digital HR",
+    "physicalPdfPages": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ]
+  },
+  "scope": "Local source, isolated PostgreSQL integration tests, frontend tests and builds. No deployment, GitHub upload, UX score or production security certification.",
+  "regressionChecksPassed": true,
+  "requirementsChecksExecuted": true,
+  "requirementsChecksPassed": true,
+  "results": [
+    {
+      "name": "frontend-tests",
+      "directory": "frontend",
+      "command": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "src/utils/workflow.test.mjs",
+        "src/utils/academy.test.mjs",
+        "src/utils/assistant.test.mjs",
+        "src/utils/notifications.test.mjs",
+        "src/utils/profile.test.mjs",
+        "src/utils/storage.test.mjs",
+        "src/api/client.test.mjs"
+      ],
+      "exitCode": 0,
+      "durationMs": 852,
+      "tests": 75,
+      "passed": 75,
+      "failed": 0,
+      "log": "reports/hackathon-audit/frontend-tests.log"
+    },
+    {
+      "name": "backend-tests",
+      "directory": "backend",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "--test-reporter=tap",
+        "test/academy.test.ts",
+        "test/api.test.ts",
+        "test/roles.test.ts"
+      ],
+      "exitCode": 0,
+      "durationMs": 4084,
+      "tests": 23,
+      "passed": 23,
+      "failed": 0,
+      "log": "reports/hackathon-audit/backend-tests.log"
+    },
+    {
+      "name": "pdf-requirements",
+      "directory": "backend",
+      "command": [
+        "node",
+        "--import",
+        "tsx",
+        "--test",
+        "--test-reporter=tap",
+        "audit/hackathon.test.ts"
+      ],
+      "exitCode": 0,
+      "durationMs": 2940,
+      "tests": 8,
+      "passed": 8,
+      "failed": 0,
+      "log": "reports/hackathon-audit/pdf-requirements.log",
+      "cases": [
+        {
+          "id": "HR-01",
+          "passed": true,
+          "title": "employee, manager and HR/admin roles are implemented (PDF 14-16)"
+        },
+        {
+          "id": "HR-02",
+          "passed": true,
+          "title": "employee snapshot does not disclose another employee vacation balance or hire date (PDF 16-17)"
+        },
+        {
+          "id": "HR-03",
+          "passed": true,
+          "title": "official HR fields are read-only at API boundary (PDF 16)"
+        },
+        {
+          "id": "HR-04",
+          "passed": true,
+          "title": "role cannot be selected by login payload (PDF 15,17)"
+        },
+        {
+          "id": "HR-05",
+          "passed": true,
+          "title": "courses, profiles and notifications are scoped to authenticated account (PDF 15-17)"
+        },
+        {
+          "id": "HR-06",
+          "passed": true,
+          "title": "assistant answers cite prepared source and refuse unsupported personal/HR facts (PDF 15,17)"
+        },
+        {
+          "id": "HR-07",
+          "passed": true,
+          "title": "assistant instructions match the current server-backed interface (PDF 15,17)"
+        },
+        {
+          "id": "HR-08",
+          "passed": true,
+          "title": "one complete leave workflow provides server status, history and notification (PDF 13,15,17)"
+        }
+      ]
+    },
+    {
+      "name": "frontend-types",
+      "directory": "frontend",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "-b"
+      ],
+      "exitCode": 0,
+      "durationMs": 5373,
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "log": "reports/hackathon-audit/frontend-types.log"
+    },
+    {
+      "name": "backend-build",
+      "directory": "backend",
+      "command": [
+        "node",
+        "node_modules/typescript/bin/tsc"
+      ],
+      "exitCode": 0,
+      "durationMs": 4033,
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "log": "reports/hackathon-audit/backend-build.log"
+    },
+    {
+      "name": "frontend-build",
+      "directory": "frontend",
+      "command": [
+        "node",
+        "node_modules/vite/bin/vite.js",
+        "build"
+      ],
+      "exitCode": 0,
+      "durationMs": 651,
+      "tests": 0,
+      "passed": 0,
+      "failed": 0,
+      "log": "reports/hackathon-audit/frontend-build.log"
+    }
+  ],
+  "inventory": {
+    "configuredServerRoles": [
+      "employee",
+      "manager",
+      "hr"
+    ],
+    "apiPaths": [
+      "/api/health",
+      "/api/auth/login",
+      "/api/auth/logout",
+      "/api/workspace",
+      "/api/requests",
+      "/api/requests/:id/decision",
+      "/api/requests/:id/withdraw",
+      "/api/notifications/:id/read",
+      "/api/notifications/read-all",
+      "/api/profile/contacts",
+      "/api/courses/:id/lessons/:lessonId/complete",
+      "/api/courses/:id/answers",
+      "/api/courses/:id/quiz/submit",
+      "/api/courses/:id/quiz/retry"
+    ],
+    "architectureArtifacts": [
+      "docs/architecture.html",
+      "docs/architecture.png",
+      "docs/architecture.svg",
+      "scripts/export-architecture.mjs"
+    ],
+    "presentationArtifacts": [
+      "deliverables/JanaMen_Hackathon_2026.pptx"
+    ],
+    "dockerArtifacts": [],
+    "integrationCodeFiles": [],
+    "integrationDocumentationFiles": [
+      "backend/README.md",
+      "docs/INTEGRATIONS.md",
+      "README.md"
+    ],
+    "localizationFiles": [],
+    "hardcodedLocalSeedPassword": true,
+    "trackedSourceFiles": 86,
+    "gitRuntimeIgnoresPassed": true
+  },
+  "limitations": [
+    "Static artifact discovery does not prove architectural quality.",
+    "A passing test is evidence for its scenario, not full PDF compliance.",
+    "Public test-account password is detected separately from real secrets; private .local data is never scanned or printed.",
+    "No live GitHub state, presentation quality or RU/KZ translation quality was checked."
+  ]
+}

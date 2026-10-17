@@ -1,0 +1,415 @@
+.modal.assistant-modal {
+  width: min(1050px, calc(100% - 40px));
+  overflow: hidden;
+}
+.assistant-modal .modal-surface {
+  padding: 24px 0 0;
+}
+.assistant-modal .modal-heading {
+  margin: 0 24px 8px;
+}
+.jana-chat-meta {
+  margin: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.jana-demo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 20px;
+  padding: 5px 9px;
+  background: #edf5ed;
+  color: #46624c;
+  font-size: 11px;
+}
+.jana-demo-badge > span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #65936a;
+}
+.jana-reset,
+.jana-back {
+  background: none;
+  border: 0;
+  color: #4b6b51;
+  font-size: 12px;
+  padding: 5px 0;
+}
+.jana-reset:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+.jana-chat-disclaimer {
+  margin: 12px 24px 18px;
+  font-size: 12px;
+  color: #68796d;
+  line-height: 1.6;
+}
+.jana-chat-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 310px;
+  border-top: 1px solid #e8ede6;
+}
+.jana-chat-column {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.jana-chat-log {
+  height: min(430px, calc(100dvh - 365px));
+  min-height: 170px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px;
+  background: #fbfcf9;
+}
+.jana-welcome {
+  padding: 2px 0;
+}
+.jana-welcome > .assistant-symbol {
+  margin-bottom: 14px;
+  width: 44px;
+  height: 44px;
+}
+.jana-welcome h3 {
+  font-size: 23px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.jana-welcome > p {
+  color: #697b6e;
+  font-size: 13px;
+  line-height: 1.75;
+  max-width: 460px;
+}
+.jana-suggestions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+  margin-top: 23px;
+}
+.jana-suggestions button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  text-align: left;
+  font-size: 12px;
+  color: #4b6552;
+  background: white;
+  border: 1px solid #dfe8dd;
+  border-radius: 10px;
+  padding: 13px;
+  line-height: 1.55;
+}
+.jana-suggestions svg {
+  flex-shrink: 0;
+}
+.jana-suggestions button:hover {
+  border-color: #7da583;
+  background: #f1f7ee;
+}
+.jana-turn + .jana-turn {
+  margin-top: 25px;
+}
+.jana-user-message {
+  margin: 0 0 15px auto;
+  max-width: 90%;
+  padding: 13px 16px;
+  border-radius: 13px 13px 2px 13px;
+  background: #e7efe3;
+}
+.jana-speaker {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #57725c;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 7px;
+}
+.jana-user-message p,
+.jana-answer > p {
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.jana-answer {
+  background: white;
+  border: 1px solid #e4eae0;
+  border-radius: 2px 13px 13px;
+  padding: 16px;
+}
+.jana-answer.refusal,
+.jana-answer.clarification {
+  border-color: #e7dcc5;
+  background: #fffdf7;
+}
+.jana-answer-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8c6a36;
+  margin-bottom: 9px;
+}
+.jana-citations {
+  display: grid;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #e9eee5;
+}
+.jana-citations > span {
+  font-size: 10px;
+  color: #788779;
+}
+.jana-citations a {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: #3f704b;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  line-height: 1.7;
+}
+.jana-citations a svg {
+  flex-shrink: 0;
+}
+.jana-composer {
+  padding: 15px 24px 14px;
+  border-top: 1px solid #e4eae0;
+}
+.jana-composer > label {
+  display: block;
+  font-size: 11px;
+  color: #5b6f60;
+  margin-bottom: 8px;
+}
+.jana-composer-field {
+  display: flex;
+  align-items: flex-end;
+  padding: 8px;
+  border: 1px solid #cddcca;
+  border-radius: 11px;
+  gap: 8px;
+}
+.jana-composer-field:focus-within {
+  outline: 2px solid #79957b;
+  outline-offset: 2px;
+}
+.jana-composer-field textarea {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  resize: none;
+  padding: 3px 5px;
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #2e4936;
+  background: transparent;
+  outline: none;
+}
+.jana-composer-field textarea::placeholder {
+  color: #7a8d7c;
+}
+.jana-composer-field button {
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  background: #3d6548;
+  color: white;
+  border: 0;
+  border-radius: 8px;
+}
+.jana-composer-field button:disabled {
+  background: #e8ede5;
+  color: #8b9d8b;
+  cursor: default;
+}
+.jana-composer-hint {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+  color: #78877a;
+  font-size: 9px;
+  line-height: 1.5;
+}
+.jana-session-note {
+  color: #78877a;
+  font-size: 9px;
+  line-height: 1.6;
+  margin-top: 8px;
+}
+.jana-knowledge {
+  border-left: 1px solid #e4eae0;
+  padding: 23px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  max-height: min(630px, calc(100dvh - 175px));
+}
+.jana-document-tag {
+  display: block;
+  color: #7b917c;
+  font-size: 9px;
+  letter-spacing: 1.2px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.jana-knowledge h3 {
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+.jana-knowledge-index > p {
+  margin: 10px 0 15px;
+  color: #718175;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.jana-knowledge-index nav {
+  display: grid;
+}
+.jana-knowledge-index nav a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid #edf0e9;
+  color: #425d49;
+  font-size: 12px;
+  line-height: 1.6;
+  text-decoration: none;
+}
+.jana-knowledge-index nav a:hover {
+  color: #20552c;
+  text-decoration: underline;
+}
+.jana-knowledge-index nav a > span {
+  color: #93a391;
+  font-size: 10px;
+}
+.jana-knowledge-index nav a > svg {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.jana-knowledge-index small {
+  display: block;
+  font-size: 9px;
+  color: #849080;
+  margin-top: 14px;
+}
+.jana-back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 20px;
+}
+.jana-back svg {
+  transform: rotate(180deg);
+}
+.jana-document-meta {
+  color: #81907d;
+  font-size: 10px;
+  line-height: 1.8;
+  margin: 12px 0 18px;
+}
+.jana-document-body p {
+  color: #536957;
+  font-size: 12px;
+  line-height: 1.9;
+  margin-bottom: 15px;
+}
+.jana-open-section {
+  background: #edf3e9;
+  border: 1px solid #d8e5d3;
+  border-radius: 8px;
+  color: #456c4b;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.jana-document-note {
+  font-size: 10px;
+  line-height: 1.7;
+  color: #8c7960;
+  margin-top: 18px;
+}
+@media (max-width: 720px) {
+  .modal.assistant-modal {
+    width: calc(100% - 20px);
+    max-height: calc(100dvh - 20px);
+  }
+  .assistant-modal .modal-surface {
+    padding-top: 16px;
+  }
+  .assistant-modal .modal-heading {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .jana-chat-meta {
+    margin: 0 16px;
+  }
+  .jana-chat-disclaimer {
+    margin: 10px 16px 14px;
+    font-size: 11px;
+  }
+  .jana-chat-layout {
+    grid-template-columns: 1fr;
+  }
+  .jana-chat-log {
+    height: min(405px, calc(100dvh - 340px));
+    min-height: 120px;
+    padding: 18px 16px;
+  }
+  .jana-welcome h3 {
+    font-size: 22px;
+  }
+  .jana-suggestions {
+    gap: 7px;
+    margin-top: 17px;
+  }
+  .jana-suggestions button {
+    padding: 10px;
+    font-size: 11px;
+  }
+  .jana-composer {
+    padding: 12px 16px;
+  }
+  .jana-composer-hint {
+    font-size: 8px;
+  }
+  .jana-knowledge {
+    display: none;
+  }
+  .is-reading .jana-chat-column {
+    display: none;
+  }
+  .is-reading .jana-knowledge {
+    display: block;
+    border-left: 0;
+    height: min(600px, calc(100dvh - 200px));
+    max-height: none;
+    padding: 20px;
+  }
+}
+@media (max-height: 560px) {
+  .modal.assistant-modal {
+    overflow-y: auto;
+  }
+  .jana-chat-log {
+    min-height: 150px;
+  }
+}

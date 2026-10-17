@@ -1,0 +1,157 @@
+import type { EmployeeRequest } from '../types'
+import { submissionHistory } from '../utils/requests'
+
+const actor = 'Айдана Серик'
+
+// Fictional events illustrate the workflow; these are not real personnel records.
+export const initialRequests: EmployeeRequest[] = [
+  {
+    id: 'JP-1048',
+    employeeId: 'employee-aidana',
+    type: 'vacation',
+    title: 'Ежегодный отпуск',
+    description: '2–6 ноября 2026 · 5 календарных дней',
+    createdAt: '2026-10-15',
+    status: 'pending',
+    startDate: '2026-11-02',
+    endDate: '2026-11-06',
+    days: 5,
+    comment:
+      'Планирую короткую поездку. Передам текущие задачи команде до начала отпуска.',
+    history: submissionHistory(
+      'JP-1048',
+      '2026-10-15T14:28:00+05:00',
+      '2026-10-15T14:30:00+05:00',
+      actor,
+    ),
+  },
+  {
+    id: 'JP-1041',
+    employeeId: 'employee-aidana',
+    type: 'vacation',
+    title: 'Ежегодный отпуск',
+    description: '21–25 декабря 2026 · 5 календарных дней',
+    createdAt: '2026-10-10',
+    status: 'approved',
+    startDate: '2026-12-21',
+    endDate: '2026-12-25',
+    days: 5,
+    comment: 'Даты предварительно обсудили с руководителем.',
+    history: [
+      ...submissionHistory(
+        'JP-1041',
+        '2026-10-10T10:05:00+05:00',
+        '2026-10-10T10:07:00+05:00',
+        actor,
+      ),
+      {
+        id: 'JP-1041-approved',
+        title: 'Отпуск одобрен',
+        actor: 'Данияр Омаров',
+        role: 'Руководитель',
+        occurredAt: '2026-10-12T11:20:00+05:00',
+        description:
+          'Даты согласованы, задачи на период отсутствия распределены.',
+        status: 'approved',
+      },
+    ],
+  },
+  {
+    id: 'JP-1036',
+    employeeId: 'employee-aidana',
+    type: 'advance',
+    title: 'Аванс',
+    description: '50 000 ₸',
+    createdAt: '2026-09-30',
+    status: 'approved',
+    amount: 50000,
+    comment: '',
+    history: [
+      ...submissionHistory(
+        'JP-1036',
+        '2026-09-30T09:10:00+05:00',
+        '2026-09-30T09:12:00+05:00',
+        actor,
+      ),
+      {
+        id: 'JP-1036-approved',
+        title: 'Заявка одобрена',
+        actor: 'Данияр Омаров',
+        role: 'Руководитель',
+        occurredAt: '2026-09-30T11:15:00+05:00',
+        description: 'Заявка на аванс согласована.',
+        status: 'approved',
+      },
+    ],
+  },
+  {
+    id: 'JP-1024',
+    employeeId: 'employee-aidana',
+    type: 'vacation',
+    title: 'Ежегодный отпуск',
+    description: '14–18 сентября 2026 · 5 календарных дней',
+    createdAt: '2026-09-07',
+    status: 'rejected',
+    startDate: '2026-09-14',
+    endDate: '2026-09-18',
+    days: 5,
+    comment: 'Прошу согласовать отпуск на пять дней.',
+    history: [
+      ...submissionHistory(
+        'JP-1024',
+        '2026-09-07T10:00:00+05:00',
+        '2026-09-07T10:03:00+05:00',
+        actor,
+      ),
+      {
+        id: 'JP-1024-rejected',
+        title: 'Заявка отклонена',
+        actor: 'Данияр Омаров',
+        role: 'Руководитель',
+        occurredAt: '2026-09-08T15:40:00+05:00',
+        description:
+          'На выбранные даты запланирована инвентаризация. Пожалуйста, предложите другой период.',
+        status: 'rejected',
+      },
+    ],
+  },
+  {
+    id: 'JP-1012',
+    employeeId: 'employee-aidana',
+    type: 'vacation',
+    title: 'Ежегодный отпуск',
+    description: '10–14 августа 2026 · 5 календарных дней',
+    createdAt: '2026-08-03',
+    status: 'completed',
+    startDate: '2026-08-10',
+    endDate: '2026-08-14',
+    days: 5,
+    comment: '',
+    history: [
+      ...submissionHistory(
+        'JP-1012',
+        '2026-08-03T09:00:00+05:00',
+        '2026-08-03T09:04:00+05:00',
+        actor,
+      ),
+      {
+        id: 'JP-1012-approved',
+        title: 'Отпуск одобрен',
+        actor: 'Данияр Омаров',
+        role: 'Руководитель',
+        occurredAt: '2026-08-04T12:10:00+05:00',
+        description: 'Даты согласованы.',
+        status: 'approved',
+      },
+      {
+        id: 'JP-1012-completed',
+        title: 'Отпуск завершён',
+        actor: 'Мадина Ким',
+        role: 'HR',
+        occurredAt: '2026-08-17T09:00:00+05:00',
+        description: 'Период отпуска закрыт в демонстрационном сценарии.',
+        status: 'completed',
+      },
+    ],
+  },
+]

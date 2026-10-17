@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="kk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>JanaМен — архитектура және интеграциялар</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='4' fill='%23246b53'/%3E%3Ctext x='12' y='29' font-size='28' fill='white' font-family='Georgia'%3EJ%3C/text%3E%3C/svg%3E">
+<style>
+:root{color-scheme:light dark;--bg:#f2f6fa;--surface:#fff;--border:#d6e0ea;--border-bright:#818f9e;--text:#0f1a26;--text-dim:#4d6074;--accent:#246b53;--ok:#1c7443;--warn:#776300;--risk:#b0341e;--info:#145f99;--t-label:.75rem;--t-small:.875rem;--t-body:1rem;--t-lead:1.25rem;--t-h2:1.625rem;--t-h1:clamp(2.25rem,4vw,4rem);--s-1:.25rem;--s-2:.5rem;--s-3:.75rem;--s-4:1rem;--s-5:1.5rem;--s-6:2rem;--s-7:3rem;--s-8:4.5rem;--r-1:4px;--r-2:10px;--lift:rgb(18 22 20 / .12)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1520;--surface:#132031;--border:#22324a;--border-bright:#596b87;--text:#e3ecf5;--text-dim:#92a6bb;--accent:#91d7b8;--ok:#6fd3a0;--warn:#e8d36a;--risk:#ff7b6b;--info:#7cc0f0;--lift:rgb(0 0 0 / .45)}}
+*{box-sizing:border-box}html{font-size:17px;scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:'Segoe UI','IBM Plex Sans',sans-serif;font-kerning:normal;font-synthesis:none;line-height:1.55}main{max-width:64rem;margin:auto;padding:var(--s-6) var(--s-5) var(--s-8)}h1,h2,h3,p,figure{margin:0}h1{font-size:var(--t-h1);letter-spacing:-.03em;line-height:1.1;font-weight:600;max-width:24ch;margin:var(--s-2) 0 var(--s-4);text-wrap:balance}h2{font-size:var(--t-h2);line-height:1.2;letter-spacing:-.01em;text-wrap:balance}h3{font-size:var(--t-lead);line-height:1.25}p{max-width:68ch;text-wrap:pretty}a{color:var(--accent);text-underline-offset:.2em}a:hover{text-decoration-thickness:2px}button,a,summary{touch-action:manipulation}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid var(--accent);outline-offset:4px}button{font:var(--t-small) 'Consolas','IBM Plex Mono',monospace;line-height:1.5;color:var(--text);background:var(--surface);padding:var(--s-2) var(--s-3);border:1px solid var(--border-bright);border-radius:var(--r-1);cursor:pointer}button[aria-pressed=true]{border:2px solid var(--accent);padding:calc(var(--s-2) - 1px) calc(var(--s-3) - 1px);font-weight:600}button:hover{border-color:var(--accent)}.kicker,.tag,.meta{font:var(--t-label)/1.6 'Consolas','IBM Plex Mono',monospace;color:var(--text-dim)}.kicker{letter-spacing:.08em}.meta{margin-top:var(--s-3)}.lead{font-size:var(--t-lead);color:var(--text-dim);max-width:65ch}.links,.toolbar,.legend{display:flex;flex-wrap:wrap;align-items:center;gap:var(--s-3)}.links{margin:var(--s-4) 0 var(--s-5);font-size:var(--t-small)}.toolbar{margin:var(--s-5) 0 var(--s-3)}.legend{font-size:var(--t-small);color:var(--text-dim);margin-left:auto}.sample{display:inline-block;width:var(--s-5);border-top:2px solid var(--text-dim);vertical-align:middle;margin-right:var(--s-2)}.sample.planned{border-top-style:dashed}.frame{overflow:auto;border:1px solid var(--border);border-radius:var(--r-1);background-color:var(--surface);background-image:linear-gradient(color-mix(in srgb,var(--border) 45%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--border) 45%,transparent) 1px,transparent 1px);background-size:24px 24px}.overview{display:block;width:100%;min-width:52rem;height:auto}.frame[data-view=current] .future{display:none}.frame[data-view=current] .current-only{display:block}.current-only{display:none}figcaption{margin-top:var(--s-3);color:var(--text-dim);font-size:var(--t-body)}figcaption strong{font-family:'Consolas',monospace;font-size:var(--t-small);font-weight:400;color:var(--accent);margin-right:var(--s-2)}.details{margin-top:var(--s-4);border-top:1px solid var(--border);padding-top:var(--s-4);display:grid;grid-template-columns:1fr 2fr;gap:var(--s-5)}.details>*{min-width:0}.details p{font-size:var(--t-body)}.details h3{margin-top:var(--s-2)}.detail-options{display:flex;flex-wrap:wrap;gap:var(--s-2);margin-bottom:var(--s-3)}.notice{color:var(--text-dim);font-size:var(--t-small);margin-top:var(--s-3)}section{margin-top:var(--s-8)}.section-head{display:grid;grid-template-columns:1fr 3fr;gap:var(--s-5);align-items:baseline;border-top:1px solid var(--border-bright);padding-top:var(--s-5);margin-bottom:var(--s-5)}.section-head>*{min-width:0}.table-scroll{overflow:auto;border:1px solid var(--border);border-radius:var(--r-1)}table{border-collapse:collapse;width:100%;min-width:42rem;text-align:left}th{font-size:var(--t-small);background:var(--surface);font-weight:600}td,th{padding:var(--s-3) var(--s-4);border-bottom:1px solid var(--border);vertical-align:top}tbody tr:last-child td{border:0}td{font-size:var(--t-body)}.chip{display:inline-block;font:600 var(--t-label)/1.5 'Consolas',monospace;border:1px solid currentColor;border-radius:var(--r-1);padding:var(--s-1) var(--s-2);color:var(--ok)}.chip.future-chip{color:var(--warn)}.balance{margin-top:var(--s-6)}.formula{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:var(--s-4);padding:var(--s-5);background:var(--surface);border:1px dashed var(--border-bright);border-radius:var(--r-1)}.formula>*{min-width:0}.formula div{font-size:var(--t-body)}.formula small{display:block;color:var(--text-dim);font-size:var(--t-small);margin-top:var(--s-2)}.formula .op{font-size:var(--t-h2);color:var(--accent)}.formula strong{font-weight:600}.multiples{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:var(--s-5);margin-top:var(--s-5)}.case{min-width:0;border-top:1px solid var(--border-bright);padding-top:var(--s-4)}.case svg{width:100%;height:auto;margin-top:var(--s-4)}.case h3{margin-top:var(--s-3)}.case .chip{color:var(--warn)}.case svg text{fill:var(--text);font-size:.875rem;font-family:inherit}.case svg rect{fill:var(--surface);stroke:var(--border-bright);stroke-width:1.5}.case svg path{fill:none;stroke:var(--accent);stroke-width:2}.case figcaption{font-size:var(--t-small)}details{border-top:1px solid var(--border);padding:var(--s-4) 0;margin-top:var(--s-4)}summary{cursor:pointer;font-weight:600}details p{padding-top:var(--s-3);color:var(--text-dim)}.sources{margin-top:var(--s-8);border-top:1px solid var(--border-bright);padding-top:var(--s-5)}.sources ul{padding-left:var(--s-5)}.sources li{margin-top:var(--s-2)}.sources .notice{max-width:75ch}code{font-family:'Consolas',monospace;font-size:.875em;overflow-wrap:anywhere}.detail-controls[hidden]{display:none}.skip{position:absolute;top:-100px}.skip:focus{top:var(--s-2);left:var(--s-2);background:var(--surface);padding:var(--s-3);z-index:2}::selection{background:color-mix(in srgb,var(--accent) 20%,transparent)}
+@media(max-width:650px){main{padding:var(--s-5) var(--s-4) var(--s-7)}h1{font-size:2.25rem}.lead{font-size:var(--t-body)}.legend{margin-left:0}.details,.section-head{grid-template-columns:minmax(0,1fr);gap:var(--s-3)}.formula{grid-template-columns:minmax(0,1fr)}.formula .op{text-align:left}.overview{min-width:52rem}.toolbar{align-items:flex-start}.multiples{grid-template-columns:minmax(0,1fr)}section{margin-top:var(--s-7)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{:root{color-scheme:light;--bg:#fff;--surface:#fff;--text:#0f1a26;--text-dim:#4d6074;--accent:#246b53;--border:#d6e0ea;--border-bright:#818f9e;--warn:#776300;--ok:#1c7443}html{font-size:11pt}main{max-width:none;padding:0}h1{font-size:2.25rem}.toolbar,.detail-controls,.skip{display:none}.frame{overflow:visible;background-image:none}.overview{min-width:0;width:100%}.frame .future{display:block!important}.frame .current-only{display:none!important}.details{display:none}figure,.case,.formula{break-inside:avoid}section,.sources{margin-top:var(--s-6)}table{min-width:0}.table-scroll{overflow:visible}.links{margin-bottom:var(--s-4)}a{color:var(--text)}}
+</style>
+</head>
+<body>
+<a class="skip" href="#architecture">Схемаға өту</a>
+<main>
+<header>
+  <div class="kicker">JanaМен · архитектура</div>
+  <h1>Бір кабинет. Кадр мен құжаттың бөлек көздері.</h1>
+  <p class="lead">Қазір: браузер → Fastify → PostgreSQL. Болашақта: кадр 1С:ЗУП-тен оқылады, құжат Documentolog-қа жіберіледі.</p>
+  <div class="links"><a href="INTEGRATIONS.md">Интеграциялардың толық сипаттамасы</a><a href="architecture.svg">Жеке SVG схема</a><a href="../README.md">Жобаны іске қосу</a></div>
+</header>
+<figure id="architecture">
+  <div class="toolbar detail-controls" hidden>
+    <div role="group" aria-label="Схема қабаттары"><button type="button" data-view="all" aria-pressed="true">Қазір + жоспар</button> <button type="button" data-view="current" aria-pressed="false">Тек қазіргі жүйе</button></div>
+    <div class="legend"><span><i class="sample"></i>Жұмыс істейді</span><span><i class="sample planned"></i>Жоспар / қосылмаған</span></div>
+  </div>
+  <div class="frame" id="diagram-frame" data-view="all" tabindex="0" aria-label="Архитектура схемасы. Тар экранда көлденең айналдыруға болады.">
+<!-- architecture-svg:start -->
+<svg class="overview" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 640" role="img" aria-labelledby="arch-title arch-desc">
+<title id="arch-title">JanaМен архитектурасы: қазір және болашақ</title>
+<desc id="arch-desc">Қолданыста React браузері Fastify API-іне, API PostgreSQL-ге жүгінеді. AI Jana браузердегі анықтамалықты оқиды. Жоспарланған worker PostgreSQL кезегін өңдейді, 1С:ЗУП-тен кадрды оқиды және Documentolog-қа құжат жіберіп, тексерілген мәртебені қабылдайды. Үзік шекаралар әлі қосылмаған бөліктерді білдіреді.</desc>
+<style>
+svg{--svg-bg:var(--surface,#fff);--svg-text:var(--text,#0f1a26);--svg-dim:var(--text-dim,#4d6074);--svg-border:var(--border-bright,#818f9e);--svg-accent:var(--accent,#246b53);font-family:'Segoe UI','IBM Plex Sans',sans-serif;font-size:17px}
+.current-only{display:none}
+.arch-bound{fill:none;stroke:var(--svg-border);stroke-width:1;stroke-dasharray:6 5}.arch-node rect,.arch-node path,.arch-node ellipse{fill:var(--svg-bg);stroke:var(--svg-border);stroke-width:1.75}.arch-node .planned-box{stroke-dasharray:6 5}.arch-node text{fill:var(--svg-text);font-size:18px;font-weight:600}.arch-node .sub{fill:var(--svg-dim);font-size:14px;font-weight:400}.arch-node .kind,.arch-zone{fill:var(--svg-dim);font-size:13px;font-family:'Consolas',monospace;font-weight:400}.arch-edge{fill:none;stroke:var(--svg-dim);stroke-width:1.75;marker-end:url(#arch-arrow)}.arch-edge.async{stroke-dasharray:6 5}.arch-label{fill:var(--svg-dim);font-size:14px;paint-order:stroke;stroke:var(--svg-bg);stroke-width:5;stroke-linejoin:round}.arch-node.active rect,.arch-node.active path,.arch-node.active ellipse{stroke:var(--svg-accent);stroke-width:2.75}.arch-node.active text{fill:var(--svg-accent)}.arch-callout{fill:var(--svg-accent);font-size:14px}
+@media(prefers-color-scheme:dark){svg{--svg-bg:var(--surface,#132031);--svg-text:var(--text,#e3ecf5);--svg-dim:var(--text-dim,#92a6bb);--svg-border:var(--border-bright,#596b87);--svg-accent:var(--accent,#91d7b8)}}
+</style>
+<defs><marker id="arch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10Z" fill="context-stroke"/></marker></defs>
+<rect class="arch-bound" x="16" y="20" width="760" height="215"/>
+<text class="arch-zone" x="32" y="45">JanaМен · қазіргі жергілікті жүйе</text>
+<g class="future">
+  <rect class="arch-bound" x="280" y="280" width="465" height="345"/>
+  <text class="arch-zone" x="296" y="305">ЖОСПАР · сервердегі интеграция қабаты</text>
+  <rect class="arch-bound" x="775" y="280" width="249" height="345"/>
+  <text class="arch-zone" x="792" y="305">СЫРТҚЫ ЖҮЙЕЛЕР · қосылмаған</text>
+</g>
+<path class="arch-edge" d="M230 132H300"/>
+<text class="arch-label" x="242" y="118">/api</text>
+<path class="arch-edge" d="M510 132H585"/>
+<text class="arch-label" x="530" y="118">SQL</text>
+<path class="arch-edge" d="M130 190V365"/>
+<text class="arch-label" x="145" y="265">анықтаманы</text><text class="arch-label" x="145" y="285">оқиды</text>
+<g class="future">
+  <path class="arch-edge async" d="M680 190V340H510"/>
+  <text class="arch-label" x="540" y="328">кезекті оқиды</text>
+  <path class="arch-edge async" d="M510 365H715V190"/>
+  <text class="arch-label" x="540" y="390">көшірмені сақтайды</text>
+  <path class="arch-edge async" d="M795 405H510"/>
+  <text class="arch-label" x="550" y="427">кадр деректерін береді</text>
+  <path class="arch-edge async" d="M510 450H660V540H795"/>
+  <text class="arch-label" x="665" y="526">құжат жібереді</text>
+  <path class="arch-edge async" d="M795 590H405V470"/>
+  <text class="arch-label" x="440" y="577">тексерілген мәртебені қабылдайды</text>
+</g>
+<g class="arch-node" data-ref="browser"><rect x="30" y="80" width="200" height="110" rx="4"/><text class="kind" x="46" y="103">БРАУЗЕР · жұмыс істейді</text><text x="46" y="132">React + TypeScript</text><text class="sub" x="46" y="156">Қызметкер · басшы · HR</text><text class="sub" x="46" y="177">Сыртқы құпияларсыз</text></g>
+<g class="arch-node active" data-ref="api"><rect x="300" y="80" width="210" height="110" rx="4"/><text class="kind" x="316" y="103">API · жұмыс істейді</text><text x="316" y="132">Fastify + TypeScript</text><text class="sub" x="316" y="156">Сессия · құқық · ереже</text><text class="sub" x="316" y="177">Өтініш · оқу · хабарлама</text></g>
+<g class="arch-node" data-ref="database"><path d="M585 94 Q680 67 775 94V178 Q680 205 585 178Z"/><ellipse cx="680" cy="94" rx="95" ry="14"/><text class="kind" x="605" y="126">БД · жұмыс істейді</text><text x="605" y="151">PostgreSQL</text><text class="sub" x="605" y="174">Өтініш · есеп · оқу</text></g>
+<g class="arch-node" data-ref="knowledge"><rect x="30" y="365" width="200" height="105" rx="4"/><text class="kind" x="46" y="389">БРАУЗЕР · жұмыс істейді</text><text x="46" y="418">AI Jana</text><text class="sub" x="46" y="442">Нұсқаулық · дереккөз</text><text class="sub" x="46" y="461">Жеке деректерді оқымайды</text></g>
+<g class="future">
+  <g class="arch-node" data-ref="worker"><rect class="planned-box" x="300" y="325" width="210" height="145" rx="4"/><path d="M308 333H322M308 340H322M308 347H322"/><text class="kind" x="332" y="347">ЖОСПАР</text><text x="316" y="374">Worker / адаптер</text><text class="sub" x="316" y="398">Outbox / inbox · retry</text><text class="sub" x="316" y="422">ID mapping · аудит</text><text class="sub" x="316" y="446">Machine-auth қабылдағыш</text></g>
+  <g class="arch-node" data-ref="zup"><rect class="planned-box" x="795" y="330" width="210" height="105" rx="4"/><text class="kind" x="811" y="353">БОЛАШАҚ · тек оқу</text><text x="811" y="382">1С:ЗУП</text><text class="sub" x="811" y="405">Кадр · ұйым · басшы</text><text class="sub" x="811" y="425">HTTP JSON / OData*</text></g>
+  <g class="arch-node" data-ref="documentolog"><rect class="planned-box" x="795" y="500" width="210" height="105" rx="4"/><text class="kind" x="811" y="523">БОЛАШАҚ · өнімді келісу</text><text x="811" y="552">Documentolog</text><text class="sub" x="811" y="575">Құжат · қол қою · мәртебе</text><text class="sub" x="811" y="596">API + расталған callback*</text></g>
+  <text class="arch-zone" x="300" y="616">* Нақты API мен қауіпсіздік тәсілі провайдермен келісіледі.</text>
+</g>
+<g class="current-only"><text class="arch-callout" x="300" y="340">Сыртқы интеграциялар қазір қосылмаған.</text><text class="arch-zone" x="300" y="370">Кезек, worker және webhook әлі іске асырылмаған.</text></g>
+</svg>
+<!-- architecture-svg:end -->
+  </div>
+  <figcaption><strong>Fig. 1</strong>Сыртқы жүйелерге тек сервердегі болашақ интеграция қабаты жүгінеді; браузердің жолы өзгермейді.</figcaption>
+</figure>
+<div class="details" aria-live="polite">
+  <div><span class="chip future-chip">◇ Жобалық шешім</span><h3 id="detail-title">Сыртқы жүйелер әлі қосылмаған</h3></div>
+  <div><div class="detail-options detail-controls" role="group" aria-label="Ағын түсіндірмесі" hidden><button type="button" data-detail="zup" aria-pressed="false">1С ағыны</button><button type="button" data-detail="documentolog" aria-pressed="false">Құжат ағыны</button><button type="button" data-detail="worker" aria-pressed="false">Ақаудан қалпына келу</button></div><p id="detail-text">Үзік сызықтағы компоненттер — іске асыру ұсынысы. Олардың кестелері, маршруттары, фондық процесі және құпиялары қазіргі жобада жоқ.</p></div>
+</div>
+<p class="notice">Схемадағы 1С жебесі жауаптағы дерек бағытын көрсетеді. Сұрауды worker бастайды. Тар экранда схеманы көлденең айналдырыңыз.</p>
+
+<section aria-labelledby="ownership-title">
+  <div class="section-head"><span class="tag">Дерек иесі</span><h2 id="ownership-title">Әр деректің негізгі көзі біреу.</h2></div>
+  <div class="table-scroll"><table><caption class="notice">Болашақтағы жауапкершілік; нақты қосылу жоқ.</caption><thead><tr><th scope="col">Негізгі жүйе</th><th scope="col">Өзі басқаратын дерек</th><th scope="col">JanaМен шекарасы</th></tr></thead><tbody>
+    <tr><td>1С:ЗУП</td><td>Кадр, ұйым, бөлім, басшы</td><td>Оқуға арналған көшірме; рөлдер мен жеке контактілерді импорт алмастырмайды</td></tr>
+    <tr><td>JanaМен</td><td>Өтініш, басшы шешімі, рұқсат, тарих</td><td>Қызметкер — өзі; басшы — командасы; HR — компаниясы</td></tr>
+    <tr><td>Documentolog</td><td>Құжат, қол қою, тексерілген нәтиже</td><td>Өтінішпен байланысты сыртқы ID; мәртебе мен құжатқа рұқсат</td></tr>
+    <tr><td>JanaМен</td><td>Жеке контактілер, Academy, хабарламалар</td><td>Сыртқы жүйелерге әдепкі жіберілмейді; AI жеке деректі оқымайды</td></tr>
+  </tbody></table></div>
+  <figure class="balance">
+    <div class="formula" role="img" aria-label="Жоспарланған қолжетімді қалдық: 1С расталған қалдығынан оған әлі кірмеген жергілікті мақұлдаулар шегеріледі.">
+      <div><strong>1С расталған қалдығы</strong><small>Белгілі есептік кесінді</small></div><span class="op" aria-hidden="true">−</span><div><strong>Есепке кірмеген мақұлдаулар</strong><small>requestId бойынша салыстыру</small></div><span class="op" aria-hidden="true">=</span><div><strong>Қолжетімді күн</strong><small>Сол қызметкер, сол кесінді</small></div>
+    </div>
+    <figcaption><strong>Fig. 2</strong>Баланс импорты — бөлек кезең: сәйкестігі расталмаса, қазіргі <code>opening_days − vacation_debits</code> есебі қалады.</figcaption>
+  </figure>
+  <details><summary>Неге 1С қалдығын жай ғана көшірмейміз?</summary><p>1С бұрынғы демалысты ескеріп қойған болуы мүмкін. Сол қалдыққа жергілікті шегеруді қайта қолдану күнді екінші рет азайтады. Бір есептік кесіндідегі баланс пен ескерілген өтініштердің сәйкестігі қажет. Documentolog оқиғасы ledger-ді өзгертпейді.</p></details>
+  <details><summary>Сыртқы тұлғаны қалай табамыз?</summary><p>Компания мен еңбек қатынасының тұрақты сыртқы ID-лері ішкі <code>employees.id</code>-мен байланысады. Аты-жөн, email және ЖСН негізгі кілт болмайды. Бір адамдағы бірнеше еңбек қатынасы мен компания ауысуы бөлек өңделеді. HR құқығы импорттан автоматты берілмейді.</p></details>
+</section>
+
+<section aria-labelledby="failure-title">
+  <div class="section-head"><span class="tag">Жеткізу және ақау</span><h2 id="failure-title">Құжат қатесі басшы шешімін қайталамайды.</h2></div>
+  <figure>
+    <div class="formula" role="img" aria-label="Жоспар: мақұлдау SQL транзакциясында outbox жасайды; worker құжатты жібереді; тексерілген callback құжат мәртебесін жаңартады.">
+      <div><strong>Мақұлдау + outbox</strong><small>Бір SQL транзакциясы</small></div><span class="op" aria-hidden="true">→</span><div><strong>Worker → құжат</strong><small>Транзакциядан кейін жіберу</small></div><span class="op" aria-hidden="true">→</span><div><strong>Тексерілген мәртебе</strong><small>Inbox → хабарлама</small></div>
+    </div>
+    <figcaption><strong>Fig. 3</strong>Өтініш күйі, жеткізу күйі және құжат күйі бөлек сақталады; қол қою басшы шешімінің орнына жүрмейді.</figcaption>
+  </figure>
+  <div class="multiples">
+    <figure class="case"><span class="chip">△ 1С қолжетімсіз</span><h3>Соңғы жарамды көшірме қалады</h3><svg viewBox="0 0 300 120" role="img" aria-label="1С-тен оқу тоқтайды; JanaМен соңғы көшірмені сақтайды және ескіруді көрсетеді."><rect x="8" y="25" width="90" height="55" rx="4" stroke-dasharray="6 5"/><text x="24" y="58">1С:ЗУП</text><path d="M110 52H184M142 40L158 64M158 40L142 64"/><rect x="198" y="25" width="94" height="55" rx="4"/><text x="210" y="58">Көшірме</text><text x="28" y="108">Ескіру белгісі → келісілген шек</text></svg><figcaption><strong>Fig. 4</strong>Ескіру шегі асса, болашақта жаңа беру мен мақұлдау жабылады; қарау ашық қалады.</figcaption></figure>
+    <figure class="case"><span class="chip">△ Жіберу timeout</span><h3>Құжатты соқыр қайталамаймыз</h3><svg viewBox="0 0 300 120" role="img" aria-label="Worker жасау сұрауының нәтижесін білмесе, сол кілтпен салыстырады немесе тексеруге береді."><rect x="8" y="25" width="90" height="55" rx="4"/><text x="24" y="58">Worker</text><path d="M108 52H185M176 46L185 52L176 58" stroke-dasharray="6 5"/><rect x="198" y="25" width="94" height="55" rx="4" stroke-dasharray="6 5"/><text x="210" y="58">Құжат ?</text><text x="28" y="108">Салыстыру → needs_review</text></svg><figcaption><strong>Fig. 5</strong>Провайдердің idempotency не іздеу мүмкіндігі расталмаса, белгісіз нәтиже қолмен тексеріледі.</figcaption></figure>
+    <figure class="case"><span class="chip">△ Дубль callback</span><h3>Бір нәтиже қайта қолданылмайды</h3><svg viewBox="0 0 300 120" role="img" aria-label="Қайталанған сыртқы оқиға inbox-та ажыратылып, тек бір құжат жаңартуы қолданылады."><rect x="8" y="25" width="90" height="55" rx="4"/><text x="24" y="58">Оқиға</text><path d="M108 45H185M108 60H168M176 39L185 45L176 51"/><rect x="198" y="25" width="94" height="55" rx="4"/><text x="216" y="58">Inbox</text><text x="28" y="108">ID + нұсқа → тексерілген күй</text></svg><figcaption><strong>Fig. 6</strong>Компания сәйкестігі, түпнұсқалық, оқиға кілті және нұсқа тексеріледі.</figcaption></figure>
+  </div>
+  <details><summary>Қазіргі жергілікті серверге webhook ашыла ма?</summary><p>Жоқ. Қазіргі loopback, Host, Origin және CSRF шектеулері сақталады. Болашақта HTTPS reverse proxy мен бөлек machine-auth қабылдағыш қажет. Callback-тің сенімділігі дәлелденбесе, ол қол қою мәртебесін өзгертпейді. Polling тек провайдерде мәртебе оқу API-і расталғанда қолданылады.</p></details>
+  <details><summary>Келесі іске асыру қадамы қандай?</summary><p>Өнім нұсқалары мен дерек келісімін бекіту → 1С оқуға арналған адаптер mock-ы → outbox пен Documentolog mock-ы → қауіпсіз callback және UI → баланс салыстыруы → шектелген пилот. Бұл бет нақты сыртқы сұрау жібермейді.</p></details>
+</section>
+
+<footer class="sources">
+  <h2>Мүмкіндік расталған. Нақты контур әлі келісілмеген.</h2>
+  <ul>
+    <li><a href="https://v8.1c.ru/platforma/http-servisy/">1С: HTTP-сервистер</a> және <a href="https://v8.1c.ru/platforma/rest-interfeys/">REST интерфейсі</a> — платформаның мүмкіндіктері; дайын ЗУП endpoint уәдесі емес.</li>
+    <li><a href="https://documentolog.com/en/integrations-business/api">Documentolog Business API</a> — құжат пен webhook сипаттамасы. Draft, қол қою кезегі және ашық sandbox шектеулері бар; Platform үшін жеке келісім керек.</li>
+  </ul>
+  <p class="notice">17.10.2026 · Бұл архитектура — ұсыныс. Интеграциялар, кестелер және жаңа UI күйлері қосылмаған. Нақты жүйелерге кіру не дерек жіберу орындалған жоқ. Толық контракт, қауіпсіздік, тексеру шарттары және кодпен сәйкестік: <a href="INTEGRATIONS.md">интеграциялар сипаттамасында</a>.</p>
+</footer>
+</main>
+<script>
+(() => {
+  const frame = document.getElementById('diagram-frame');
+  const nodes = Array.from(document.querySelectorAll('.arch-node'));
+  const viewButtons = Array.from(document.querySelectorAll('button[data-view]'));
+  const detailButtons = Array.from(document.querySelectorAll('button[data-detail]'));
+  const title = document.getElementById('detail-title');
+  const text = document.getElementById('detail-text');
+  const content = {
+    zup: ['1С-тен тек келісілген кадрлық өрістер оқылады', 'Worker сұрауды бастайды. Жауап алдымен тексеріліп, тұрақты компания және еңбек қатынасы ID-лері арқылы байланысады. Импорт рөлдерді, жеке контактілерді және жергілікті шегерулерді алмастырмайды. Баланс — бөлек салыстыру кезеңі.'],
+    documentolog: ['Құжат мақұлдаудан кейін жіберіледі', 'Басшы шешімімен бір транзакцияда outbox оқиғасы сақталады. Worker құжатты жібереді; тексерілген callback бөлек құжат мәртебесін жаңартады. Қол қою өтінішті қайта мақұлдамайды және күнді қайта шегермейді.'],
+    worker: ['Кезек ақау кезінде де сақталады', 'Жоспарланған outbox/inbox PostgreSQL-де сақталады. Worker қайта жалғастырады. Белгісіз create нәтижесі соқыр қайталанбайды: провайдер қолдайтын салыстыру не needs_review қажет. Сервистік құпиялар браузерге берілмейді.']
+  };
+  const setView = (view) => {
+    frame.dataset.view = view;
+    viewButtons.forEach((button) => button.setAttribute('aria-pressed', String(button.dataset.view === view)));
+    detailButtons.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+    nodes.forEach((node) => node.classList.toggle('active', node.dataset.ref === 'api'));
+    title.textContent = view === 'current' ? 'Қазіргі жүйе сыртқы сервистерсіз жұмыс істейді' : 'Сыртқы жүйелер әлі қосылмаған';
+    text.textContent = view === 'current' ? 'Fastify құқықты тексереді; PostgreSQL өтініштерді, бір реттік шегеруді, тарихты, хабарламалар мен Academy-ді сақтайды. AI Jana браузердегі дайын анықтамалықты оқиды.' : 'Үзік сызықтағы компоненттер — іске асыру ұсынысы. Олардың кестелері, маршруттары, фондық процесі және құпиялары қазіргі жобада жоқ.';
+  };
+  viewButtons.forEach((button) => button.addEventListener('click', () => setView(button.dataset.view)));
+  detailButtons.forEach((button) => button.addEventListener('click', () => {
+    setView('all');
+    const ref = button.dataset.detail;
+    detailButtons.forEach((item) => item.setAttribute('aria-pressed', String(item === button)));
+    nodes.forEach((node) => node.classList.toggle('active', node.dataset.ref === ref));
+    title.textContent = content[ref][0]; text.textContent = content[ref][1];
+  }));
+  document.querySelectorAll('.detail-controls').forEach((element) => { element.hidden = false; });
+})();
+</script>
+</body>
+</html>

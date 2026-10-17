@@ -1,0 +1,301 @@
+.demo-role-switch {
+  display: grid;
+  gap: 4px;
+}
+.demo-role-switch > span {
+  font-size: 8px;
+  color: #8c9a8d;
+  letter-spacing: 0.4px;
+}
+.demo-role-switch select {
+  font: inherit;
+  font-size: 11px;
+  color: #47724e;
+  background: #f4f8f0;
+  border: 1px solid #dce7d5;
+  border-radius: 6px;
+  padding: 7px 25px 7px 10px;
+  max-width: 150px;
+  cursor: pointer;
+}
+.demo-role-switch select:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
+}
+.manager-sidebar-help p {
+  font-size: 11px;
+}
+.manager-demo-label {
+  display: inline-block;
+  font-size: 9px;
+  color: #7d9476;
+  margin-top: 15px;
+  padding: 5px 8px;
+  border: 1px solid #e0e8db;
+  border-radius: 5px;
+}
+.team-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.team-summary > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 22px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: white;
+}
+.team-summary > div:nth-child(2) {
+  background: #f0f5eb;
+  border-color: #e1e9da;
+}
+.team-summary span {
+  font-size: 11px;
+  color: #82917b;
+  line-height: 1.7;
+}
+.team-summary strong {
+  font-size: 30px;
+  font-weight: 550;
+  color: #476c40;
+  margin: 13px 0 10px;
+}
+.team-summary small {
+  font-size: 10px;
+  color: #97a28e;
+  line-height: 1.6;
+}
+.team-request-applicant {
+  display: block;
+  font-size: 11px;
+  color: #6f8863;
+  margin-top: 5px;
+  line-height: 1.6;
+}
+.review-form {
+  border: 1px solid #dbe7d5;
+  background: #f8faf5;
+  border-radius: 11px;
+  padding: 20px;
+  margin: 0 0 28px;
+}
+.review-form-heading {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+}
+.review-form-heading h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.review-form-heading p {
+  font-size: 11px;
+  color: #8a997f;
+  line-height: 1.8;
+  margin-top: 5px;
+}
+.decision-options {
+  display: flex;
+  gap: 10px;
+  border: 0;
+  padding: 0;
+  margin: 20px 0;
+}
+.decision-options label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  flex: 1;
+  border: 1px solid #dce7d7;
+  border-radius: 7px;
+  padding: 12px;
+  color: #809074;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+.decision-options label.decision-selected {
+  color: #5d7c4b;
+  background: #edf5e5;
+  border-color: #9fbe88;
+}
+.decision-options label.decision-unavailable {
+  color: #9b9e95;
+  background: #f1f2ee;
+  border-color: #e0e2dc;
+  cursor: not-allowed;
+}
+.review-conflict {
+  margin-top: 18px;
+  padding: 13px 15px;
+  border: 1px solid #ead5c8;
+  border-radius: 8px;
+  background: #fcf3ed;
+  color: #9a6049;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.decision-options .decision-reject.decision-selected {
+  color: #ac6f53;
+  background: #fcf1e8;
+  border-color: #d9b597;
+}
+.decision-options input {
+  accent-color: #698958;
+  margin: 0;
+}
+.decision-options .decision-reject input {
+  accent-color: #ad775d;
+}
+.review-comment-label {
+  display: block;
+  font-size: 12px;
+  color: #607a52;
+}
+.review-comment-label > span {
+  font-size: 10px;
+  color: #91a186;
+  margin-left: 4px;
+}
+.review-comment {
+  display: block;
+  width: 100%;
+  min-height: 85px;
+  max-height: 220px;
+  resize: vertical;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid #dce5d6;
+  border-radius: 8px;
+  background: white;
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.8;
+  color: #536e49;
+}
+.review-comment[aria-invalid='true'] {
+  border-color: #c99778;
+}
+.review-comment::placeholder {
+  color: #a2ae97;
+}
+.review-form-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-top: 7px;
+  font-size: 10px;
+  line-height: 1.8;
+  color: #95a38b;
+}
+.review-form-meta > span {
+  white-space: nowrap;
+}
+.review-submit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 18px;
+}
+.review-submit-row > span {
+  font-size: 10px;
+  color: #95a18c;
+}
+.danger-button {
+  background: #a66b50;
+  border-color: #a66b50;
+}
+.danger-button:hover:not(:disabled) {
+  background: #8e563e;
+}
+.review-readonly {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  border: 1px solid #e6eadd;
+  padding: 14px;
+  margin-bottom: 24px;
+  border-radius: 8px;
+  color: #879579;
+  font-size: 11px;
+  line-height: 1.8;
+  background: #fafbf7;
+}
+@media (max-width: 560px) {
+  .topbar-left .breadcrumb-current {
+    display: none;
+  }
+  .topbar {
+    gap: 10px;
+  }
+  .topbar-actions {
+    gap: 10px;
+  }
+  .demo-role-switch {
+    gap: 2px;
+  }
+  .demo-role-switch select {
+    font-size: 10px;
+    max-width: 132px;
+    padding: 6px 18px 6px 8px;
+  }
+  .team-summary {
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .team-summary > div {
+    padding: 13px 10px;
+  }
+  .team-summary span {
+    font-size: 10px;
+  }
+  .team-summary strong {
+    font-size: 26px;
+    margin: 10px 0 5px;
+  }
+  .team-summary small {
+    font-size: 9px;
+  }
+  .review-form {
+    padding: 16px;
+  }
+  .review-form-heading p {
+    font-size: 10px;
+  }
+  .decision-options {
+    gap: 8px;
+  }
+  .decision-options label {
+    gap: 6px;
+    padding: 11px 8px;
+  }
+  .review-submit-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .review-submit-row > span {
+    text-align: center;
+  }
+}
+
+.review-balance {
+  font-size: 12px;
+  line-height: 1.8;
+  color: #687d5c;
+  margin-top: 16px;
+}
+.hr-directory { padding: 24px; }
+.hr-search { display: grid; gap: 8px; max-width: 520px; font-weight: 600; }
+.hr-search input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid #dce5e2; border-radius: 10px; font: inherit; background: #fff; }
+.hr-search input:focus-visible { outline: 2px solid #247c61; outline-offset: 2px; }
+.hr-employee-list { padding: 0; margin: 24px 0 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 310px), 1fr)); gap: 16px; }
+.hr-employee-list > li { min-width: 0; border: 1px solid #e5ebe8; border-radius: 14px; padding: 20px; }
+.hr-employee-list dd { overflow-wrap: anywhere; }
