@@ -15,8 +15,20 @@ interface Question {
 interface Curriculum {
   id: string
   title: string
-  lessons: { id: string }[]
+  category: string
+  duration: string
+  color: 'green' | 'peach'
+  description: string
+  lessons: { id: string; title: string; duration: string; paragraphs: string[]; takeaways: string[]; practice: string }[]
   quiz: { passingScore: number; duration: string; questions: Question[] }
+}
+interface QuizReview extends Question { correct: boolean }
+
+function publicQuestion({ id, text, options }: Question) {
+  return { id, text, options: options.map(({ id, text }) => ({ id, text })) }
+}
+function publicReview(question: QuizReview) {
+  return { ...publicQuestion(question), correctOptionId: question.correctOptionId, explanation: question.explanation, correct: question.correct }
 }
 interface EnrollmentRow {
   employee_id: string
@@ -100,7 +112,7 @@ export async function submitQuiz(pool: Pool, identity: Identity, courseId: strin
     const total = course.quiz.questions.length
     const score = Math.round(correct / total * 100)
     const passed = score >= course.quiz.passingScore
-    const review = course.quiz.questions.map((question) => ({ ...question, correct: enrollment.answers[question.id] === question.correctOptionId }))
+    const review = course.quiz.questions.map((question) => publicReview({ ...question, correct: enrollment.answers[question.id] === question.correctOptionId }))
     const { rows: count } = await client.query('SELECT count(*)::int AS count FROM quiz_attempts WHERE employee_id = $1 AND course_id = $2', [identity.userId, courseId])
     const id = randomUUID()
     await client.query('INSERT INTO quiz_attempts(id,submission_key,submitted_revision,employee_id,course_id,attempt_number,answers,review,score,correct,total,passed) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)', [id, key, revision, identity.userId, courseId, count[0].count + 1, enrollment.answers, JSON.stringify(review), score, correct, total, passed])
@@ -125,13 +137,19 @@ export async function academySnapshot(client: PoolClient, identity: Identity) {
   const { rows } = await client.query<EnrollmentRow>('SELECT e.*, c.data FROM course_enrollments e JOIN courses c ON c.id = e.course_id WHERE e.employee_id = $1 ORDER BY c.id', [identity.userId])
   const { rows: attempts } = await client.query('SELECT * FROM quiz_attempts WHERE employee_id = $1 ORDER BY course_id,attempt_number', [identity.userId])
   return {
-    courses: rows.map(({ data }) => ({ ...data, quiz: { ...data.quiz, questions: data.quiz.questions.map(({ id, text, options }) => ({ id, text, options })) } })),
+    // Curriculum and stored reviews may gain internal fields; publish only the UI contract.
+    courses: rows.map(({ data }) => ({
+      id: data.id, title: data.title, category: data.category, duration: data.duration,
+      color: data.color, description: data.description,
+      lessons: data.lessons.map(({ id, title, duration, paragraphs, takeaways, practice }) => ({ id, title, duration, paragraphs, takeaways, practice })),
+      quiz: { passingScore: data.quiz.passingScore, duration: data.quiz.duration, questions: data.quiz.questions.map(publicQuestion) },
+    })),
     enrollments: rows.map((row) => ({
       employeeId: row.employee_id, courseId: row.course_id, revision: row.revision,
       completedLessonIds: row.completed_lessons, answers: row.answers, quizView: row.quiz_view,
       ...(row.completed_at ? { completedAt: row.completed_at.toISOString() } : {}),
       attempts: attempts.filter((attempt) => attempt.course_id === row.course_id).map((attempt) => ({
-        id: attempt.id, answers: attempt.answers, review: attempt.review,
+        id: attempt.id, answers: attempt.answers, review: (attempt.review as QuizReview[]).map(publicReview),
         score: attempt.score, correct: attempt.correct, total: attempt.total, passed: attempt.passed,
         submittedAt: attempt.submitted_at.toISOString(),
       })),

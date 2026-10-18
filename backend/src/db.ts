@@ -16,7 +16,7 @@ export async function databaseUrl() {
 }
 
 export function createPool(connectionString: string) {
-  const pool = new pg.Pool({ connectionString, max: 10, connectionTimeoutMillis: 5000 })
+  const pool = new pg.Pool({ connectionString, max: process.env.VERCEL ? 5 : 10, connectionTimeoutMillis: 15000, idleTimeoutMillis: 5000 })
   pool.on('error', (error) => console.error('PostgreSQL connection error:', error.message))
   return pool
 }

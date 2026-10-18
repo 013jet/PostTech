@@ -18,12 +18,16 @@ export function Modal({
 
   useEffect(() => {
     const dialog = ref.current
+    const trigger = document.activeElement instanceof HTMLElement ? document.activeElement : null
     dialog?.showModal()
     const previousOverflow = document.body.style.overflow
     document.body.style.overflow = 'hidden'
     return () => {
       dialog?.close()
       document.body.style.overflow = previousOverflow
+      if (document.activeElement === document.body && trigger?.isConnected) {
+        trigger.focus({ preventScroll: true })
+      }
     }
   }, [])
 

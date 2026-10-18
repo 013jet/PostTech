@@ -31,6 +31,21 @@ test('PostgreSQL: authentication, authorization and leave lifecycle', async (t) 
   try {
     await migrate(pool)
     await seed(pool)
+    await t.test('hosted API restricts hosts/origins and sets secure session cookies', async () => {
+      const hosted = await buildApp(pool, { hosts: ['site.vercel.app'], origins: ['https://site.vercel.app'], secureCookies: true })
+      try {
+        const payload = { email: 'hr@janamen.local', password: localPassword }
+        const sendHosted = (host: string, origin: string) => hosted.inject({ method: 'POST', url: '/api/auth/login', headers: { host, origin, 'x-janamen-request': '1' }, payload })
+        assert.equal((await sendHosted('evil.vercel.app', 'https://site.vercel.app')).statusCode, 403)
+        assert.equal((await sendHosted('site.vercel.app', 'https://evil.vercel.app')).statusCode, 403)
+        const response = await sendHosted('site.vercel.app', 'https://site.vercel.app')
+        assert.equal(response.statusCode, 200)
+        assert.match(response.headers['set-cookie'] as string, /; Secure/i)
+        const logout = await hosted.inject({ method: 'POST', url: '/api/auth/logout', headers: { host: 'site.vercel.app', 'x-janamen-request': '1', cookie: (response.headers['set-cookie'] as string).split(';')[0] } })
+        assert.equal(logout.statusCode, 200)
+        assert.match(logout.headers['set-cookie'] as string, /; Secure/i)
+      } finally { await hosted.close() }
+    })
     await t.test('login, denied anonymous and invalid credentials; CSRF/origin/overposting protection', async () => {
       assert.equal((await send('GET', '/api/workspace')).statusCode, 401)
       assert.equal((await send('POST', '/api/auth/login', '', { email: 'employee@janamen.local', password: 'wrong' })).statusCode, 401)

@@ -56,6 +56,27 @@ test('Academy PostgreSQL: private grading, progress, retries, concurrent submiss
       assert.equal((await complete('company', outside)).statusCode, 404)
       assert.equal((await send('POST', '/api/courses/missing/lessons/company/complete', employee, {})).statusCode, 404)
     })
+    await t.test('curriculum publishes only approved fields at every nesting level', async () => {
+      const privateCourse = structuredClone(course)
+      privateCourse.internalNote = 'private-course-marker'
+      privateCourse.quiz.answerKey = 'private-course-marker'
+      privateCourse.lessons[0].internalNote = 'private-course-marker'
+      privateCourse.quiz.questions[0].internalNote = 'private-course-marker'
+      privateCourse.quiz.questions[0].options[0].internalNote = 'private-course-marker'
+      try {
+        await pool.query('UPDATE courses SET data = $2 WHERE id = $1', [course.id, privateCourse])
+        const published = (await state(employee)).courses.find((item: any) => item.id === course.id)
+        assert.equal(JSON.stringify(published).includes('private-course-marker'), false)
+        assert.equal(published.title, course.title)
+        assert.deepEqual(published.lessons, course.lessons)
+        assert.deepEqual(published.quiz.questions[0], {
+          id: course.quiz.questions[0].id, text: course.quiz.questions[0].text,
+          options: course.quiz.questions[0].options,
+        })
+      } finally {
+        await pool.query('UPDATE courses SET data = $2 WHERE id = $1', [course.id, course])
+      }
+    })
     await t.test('materials gate enforced on API, wrong lessons and forged grades rejected', async () => {
       assert.equal((await answer('values-q', 'b', 0)).json().code, 'LESSONS_REQUIRED')
       assert.equal((await submit(0)).json().code, 'LESSONS_REQUIRED')
@@ -142,6 +163,21 @@ test('Academy PostgreSQL: private grading, progress, retries, concurrent submiss
       assert.equal((await send('POST', '/api/courses/onboarding/quiz/retry', employee, { revision: before.revision })).json().code, 'COURSE_COMPLETED')
       assert.equal((await complete('company')).statusCode, 200)
       assert.deepEqual(await current(), before)
+    })
+    await t.test('stored quiz reviews cannot expose extra private fields', async () => {
+      const { rows } = await pool.query('SELECT review FROM quiz_attempts WHERE id = $1', [passedId])
+      const original = rows[0].review
+      const withPrivateFields = structuredClone(original)
+      withPrivateFields[0].internalNote = 'private-review-marker'
+      withPrivateFields[0].options[0].internalNote = 'private-review-marker'
+      try {
+        await pool.query('UPDATE quiz_attempts SET review = $2 WHERE id = $1', [passedId, JSON.stringify(withPrivateFields)])
+        const review = (await current()).attempts.find((item: any) => item.id === passedId).review
+        assert.equal(JSON.stringify(review).includes('private-review-marker'), false)
+        assert.deepEqual(review, original)
+      } finally {
+        await pool.query('UPDATE quiz_attempts SET review = $2 WHERE id = $1', [passedId, JSON.stringify(original)])
+      }
     })
     await t.test('progress/attempts/read status survive restart and seed; separate account stays at zero', async () => {
       const before = await state(employee)

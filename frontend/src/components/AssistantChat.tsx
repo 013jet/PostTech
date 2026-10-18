@@ -27,28 +27,46 @@ export function AssistantChat({
   const [draft, setDraft] = useState('')
   const [sourceId, setSourceId] = useState<string | null>(null)
   const input = useRef<HTMLTextAreaElement>(null)
+  const log = useRef<HTMLDivElement>(null)
   const lastTurn = useRef<HTMLDivElement>(null)
+  const focusResponse = useRef(false)
+  const sourcePanel = useRef<HTMLElement>(null)
   const sourceHeading = useRef<HTMLHeadingElement>(null)
   const sourceTrigger = useRef<HTMLElement | null>(null)
   const hintId = useId()
   const source = knowledgeArticles.find((article) => article.id === sourceId)
+  const tooLong = draft.length > maxQuestionLength
 
   useEffect(() => {
-    lastTurn.current?.scrollIntoView({ block: 'start', behavior: 'instant' })
+    const container = log.current
+    const turn = lastTurn.current
+    if (container && turn) container.scrollTo({
+      top: container.scrollTop + turn.getBoundingClientRect().top - container.getBoundingClientRect().top - 16,
+      behavior: 'instant',
+    })
+    else container?.scrollTo({ top: 0, behavior: 'instant' })
+    if (focusResponse.current) {
+      turn?.focus({ preventScroll: true })
+      focusResponse.current = false
+    }
   }, [turns.length])
   useLayoutEffect(() => {
-    if (sourceId) sourceHeading.current?.focus({ preventScroll: true })
+    if (sourceId) {
+      sourcePanel.current?.scrollTo({ top: 0, behavior: 'instant' })
+      sourceHeading.current?.focus({ preventScroll: true })
+    }
     else sourceTrigger.current?.focus({ preventScroll: true })
   }, [sourceId])
 
-  function send(question: string) {
+  function send(question: string, focusInput = true) {
     const value = question.trim()
     if (!value || value.length > maxQuestionLength) return
+    focusResponse.current = !focusInput
     onSend(value)
     setDraft('')
     sourceTrigger.current = null
     setSourceId(null)
-    input.current?.focus()
+    if (focusInput) input.current?.focus({ preventScroll: true })
   }
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -62,7 +80,7 @@ export function AssistantChat({
     <Modal title="AI Jana" className="assistant-modal" onClose={onClose}>
       <div className="jana-chat-meta">
         <span className="jana-demo-badge">
-          <span /> Тестовая база знаний
+          <span /> Тестовая база
         </span>
         <button
           className="jana-reset"
@@ -72,7 +90,7 @@ export function AssistantChat({
             setDraft('')
             sourceTrigger.current = null
             setSourceId(null)
-            input.current?.focus()
+            input.current?.focus({ preventScroll: true })
           }}
         >
           Новый диалог
@@ -86,6 +104,7 @@ export function AssistantChat({
         <div className="jana-chat-column">
           <div
             className="jana-chat-log"
+            ref={log}
             role="log"
             aria-label="Переписка с AI Jana"
             aria-live="polite"
@@ -103,7 +122,7 @@ export function AssistantChat({
                 </p>
                 <div className="jana-suggestions">
                   {suggestedQuestions.map((question) => (
-                    <button key={question} onClick={() => send(question)}>
+                    <button key={question} onClick={() => send(question, false)}>
                       {question}
                       <Icon name="arrow" size={15} />
                     </button>
@@ -114,6 +133,7 @@ export function AssistantChat({
             {turns.map((turn, index) => (
               <div
                 className="jana-turn"
+                tabIndex={-1}
                 key={turn.id}
                 ref={index === turns.length - 1 ? lastTurn : undefined}
               >
@@ -164,7 +184,7 @@ export function AssistantChat({
           </div>
           <form className="jana-composer" onSubmit={submit}>
             <label htmlFor={`${hintId}-question`}>Ваш вопрос</label>
-            <div className="jana-composer-field">
+            <div className={`jana-composer-field ${tooLong ? 'is-invalid' : ''}`}>
               <textarea
                 ref={input}
                 id={`${hintId}-question`}
@@ -172,7 +192,8 @@ export function AssistantChat({
                 rows={2}
                 maxLength={maxQuestionLength}
                 value={draft}
-                aria-describedby={hintId}
+                aria-invalid={tooLong}
+                aria-describedby={`${hintId}${tooLong ? ` ${hintId}-error` : ''}`}
                 onChange={(event) => setDraft(event.target.value)}
                 onKeyDown={(event) => {
                   if (
@@ -188,7 +209,7 @@ export function AssistantChat({
               <button
                 type="submit"
                 aria-label="Отправить вопрос"
-                disabled={!draft.trim()}
+                disabled={!draft.trim() || tooLong}
               >
                 <Icon name="arrow" size={19} />
               </button>
@@ -199,12 +220,13 @@ export function AssistantChat({
                 {draft.length}/{maxQuestionLength}
               </span>
             </div>
+            {tooLong && <p id={`${hintId}-error`} className="form-error" role="alert">Сократите вопрос до {maxQuestionLength} символов.</p>}
             <p className="jana-session-note">
           Переписка хранится до обновления страницы или смены аккаунта.
             </p>
           </form>
         </div>
-        <aside className="jana-knowledge" aria-label="Источники базы знаний">
+        <aside ref={sourcePanel} className="jana-knowledge" aria-label="Источники базы знаний">
           {source ? (
             <article id={`kb-${source.id}`} key={source.id}>
               <button className="jana-back" onClick={closeSource}>

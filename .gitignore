@@ -1,7 +1,11 @@
 tmp/
+.vercel/
+**/.vercel/
 node_modules/
 **/node_modules/
 **/dist/
+backend/cloud/
+**/.cloud/
 **/.local/
 **/*.log
 .env

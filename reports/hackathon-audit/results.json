@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-17T14:34:36.878Z",
+  "generatedAt": "2026-10-18T09:15:42.231Z",
   "source": {
     "path": "C:/Users/nitro/Downloads/Jana_Post_Terricon_Hackathon_2026 1.pdf",
     "challenge": "02 Digital HR",
@@ -34,7 +34,7 @@
         "src/api/client.test.mjs"
       ],
       "exitCode": 0,
-      "durationMs": 852,
+      "durationMs": 1134,
       "tests": 75,
       "passed": 75,
       "failed": 0,
@@ -51,12 +51,14 @@
         "--test-reporter=tap",
         "test/academy.test.ts",
         "test/api.test.ts",
-        "test/roles.test.ts"
+        "test/deployment.test.ts",
+        "test/roles.test.ts",
+        "test/server.test.ts"
       ],
       "exitCode": 0,
-      "durationMs": 4084,
-      "tests": 23,
-      "passed": 23,
+      "durationMs": 4534,
+      "tests": 30,
+      "passed": 30,
       "failed": 0,
       "log": "reports/hackathon-audit/backend-tests.log"
     },
@@ -72,7 +74,7 @@
         "audit/hackathon.test.ts"
       ],
       "exitCode": 0,
-      "durationMs": 2940,
+      "durationMs": 3251,
       "tests": 8,
       "passed": 8,
       "failed": 0,
@@ -129,7 +131,7 @@
         "-b"
       ],
       "exitCode": 0,
-      "durationMs": 5373,
+      "durationMs": 5579,
       "tests": 0,
       "passed": 0,
       "failed": 0,
@@ -143,7 +145,7 @@
         "node_modules/typescript/bin/tsc"
       ],
       "exitCode": 0,
-      "durationMs": 4033,
+      "durationMs": 4174,
       "tests": 0,
       "passed": 0,
       "failed": 0,
@@ -158,7 +160,7 @@
         "build"
       ],
       "exitCode": 0,
-      "durationMs": 651,
+      "durationMs": 785,
       "tests": 0,
       "passed": 0,
       "failed": 0,
@@ -194,7 +196,11 @@
       "scripts/export-architecture.mjs"
     ],
     "presentationArtifacts": [
-      "deliverables/JanaMen_Hackathon_2026.pptx"
+      "deliverables/JanaMen_Hackathon_2026.pptx",
+      "deliverables/JanaMen_Terricon_2026_KZ.pptx",
+      "deliverables/JanaMen_Terricon_2026_KZ_ready.pptx",
+      "deliverables/JanaMen_Terricon_2026_KZ_template.pptx",
+      "deliverables/JanaMen_Terricon_2026_KZ_template_final.pptx"
     ],
     "dockerArtifacts": [],
     "integrationCodeFiles": [],

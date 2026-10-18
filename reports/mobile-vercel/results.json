@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-18",
+  "url": "https://posttech.vercel.app",
+  "method": "Manual end-to-end UI interaction in the connected browser with verified CSS viewport dimensions",
+  "viewports": [ { "width": 390, "height": 844 }, { "width": 360, "height": 640 } ],
+  "result": "passed",
+  "checks": [
+    "Incorrect password produces an understandable error; correct employee and manager credentials work",
+    "Mobile menu opens, fits the viewport and closes after navigating to requests",
+    "Vacation form fits narrow screen; long content is vertically scrollable",
+    "Dates overlapping approved JP-1001 produce an explanation with its number and disable submission",
+    "After correcting dates, employee created JP-1003 for 2026-11-23 and JP-1004 for 2026-11-24",
+    "Both new requests persisted after employee page reload",
+    "Manager search by number and pending status filter work together",
+    "Manager approved JP-1003 with comment; history records the decision and further decisions are blocked",
+    "Rejection of JP-1004 was blocked for both empty and whitespace-only comments",
+    "Manager rejected JP-1004 with a meaningful comment; history records it",
+    "Both manager decisions persisted after reload",
+    "Employee received both decision notifications including manager comments",
+    "All/unread notification filters and opening the linked request work",
+    "Opening JP-1004 from its notification marked that notification read",
+    "Explicitly marking the JP-1003 approval notification read reduced the unread count again",
+    "Both read flags persisted after reload; total notifications 10, unread 8 at end of check",
+    "Employee balance changed from 17 to 16 only for approved JP-1003; rejection did not deduct days; reload left 16 days",
+    "No horizontal page overflow at 360px; request card scrollWidth equals clientWidth (312px)"
+  ],
+  "testRecords": {
+    "JP-1003": { "dates": "2026-11-23", "days": 1, "status": "approved" },
+    "JP-1004": { "dates": "2026-11-24", "days": 1, "status": "rejected" },
+    "remainingVacationDays": 16,
+    "previousRequestsPreserved": ["JP-1001", "JP-1002"]
+  },
+  "screenshots": ["notifications-390.png", "approved-360.png"],
+  "codeChanges": false,
+  "redeployed": false,
+  "reason": "No functional or layout defect found in the requested scenario",
+  "githubPush": false,
+  "limits": ["Responsive browser verification; physical iOS/Android devices and on-screen keyboards were not tested"],
+  "cleanup": "Temporary viewport override reset; test requests retained as verification evidence"
+}

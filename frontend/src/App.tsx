@@ -1,4 +1,4 @@
-import { useId, useLayoutEffect, useRef, useState } from 'react'
+import { useCallback, useId, useLayoutEffect, useRef, useState } from 'react'
 import type { ServerWorkspace } from './api/client'
 import type { FormEvent } from 'react'
 import { Header, pageLabels, requestPageLabel, Sidebar } from './components/AppShell'
@@ -7,6 +7,7 @@ import { ProfilePage } from './pages/ProfilePage'
 import { validateContacts } from './utils/profile'
 import { Icon } from './components/Icon'
 import { Modal } from './components/Modal'
+import { FeedbackToast } from './components/FeedbackToast'
 import { AssistantChat } from './components/AssistantChat'
 import { answerQuestion } from './utils/assistant'
 import type { ChatTurn } from './utils/assistant'
@@ -83,6 +84,8 @@ function VacationForm({
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const sending = useRef(false)
+  const startField = useRef<HTMLInputElement>(null)
+  const endField = useRef<HTMLInputElement>(null)
   const errorId = useId()
   const days = calendarDays(start, end)
   const conflictError = vacationConflictMessage(
@@ -90,10 +93,11 @@ function VacationForm({
   )
   const balanceError = vacationBalanceMessage(days, applicant.vacationDays)
   const shownError = error || conflictError || balanceError
+  const datesInvalid = Boolean(conflictError || balanceError || (error && validateVacationDates(start, end, applicant.vacationDays, today)))
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (sending.current) return
-    const validation = validateVacationDates(
+    const validation = !start ? 'Укажите дату начала отпуска.' : !end ? 'Укажите дату окончания отпуска.' : validateVacationDates(
       start,
       end,
       applicant.vacationDays,
@@ -101,6 +105,7 @@ function VacationForm({
     )
     if (validation) {
       setError(validation)
+      ;(!start || start < today ? startField : endField).current?.focus()
       return
     }
     if (conflictError || balanceError) return
@@ -130,10 +135,11 @@ function VacationForm({
           Дата начала
           <input
             type="date"
+            ref={startField}
             disabled={busy}
             min={today}
             value={start}
-            aria-invalid={Boolean(conflictError || (balanceError && days > 0))}
+            aria-invalid={datesInvalid}
             aria-describedby={shownError ? errorId : undefined}
             onInput={(event) => {
               setStart(event.currentTarget.value)
@@ -146,10 +152,11 @@ function VacationForm({
           Дата окончания
           <input
             type="date"
+            ref={endField}
             disabled={busy}
             min={start || today}
             value={end}
-            aria-invalid={Boolean(conflictError || (balanceError && days > 0))}
+            aria-invalid={datesInvalid}
             aria-describedby={shownError ? errorId : undefined}
             onInput={(event) => {
               setEnd(event.currentTarget.value)
@@ -159,6 +166,11 @@ function VacationForm({
           />
         </label>
       </div>
+      {shownError && (
+        <p id={errorId} className="form-error" role="alert">
+          {shownError}
+        </p>
+      )}
       <label className="request-comment-field">
         Комментарий <span>необязательно</span>
         <textarea
@@ -176,11 +188,6 @@ function VacationForm({
           <Icon name="calendar" size={18} />
           Продолжительность: {days} календ. дн.
         </div>
-      )}
-      {shownError && (
-        <p id={errorId} className="form-error" role="alert">
-          {shownError}
-        </p>
       )}
       <p className="demo-note">
         Заявка сохранится на сервере и будет направлена вашему руководителю.
@@ -300,8 +307,9 @@ function App({ remote }: { remote: ServerWorkspace }) {
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null)
   const [chatTurns, setChatTurns] = useState<ChatTurn[]>([])
   const [notice, setNotice] = useState('')
+  const dismissNotice = useCallback(() => setNotice(''), [])
   const mainRef = useRef<HTMLElement>(null)
-  const [mainFocusVersion, setMainFocusVersion] = useState(0)
+  const [mainFocusVersion, setMainFocusVersion] = useState(1)
   useLayoutEffect(() => {
     if (!mainFocusVersion) return
     mainRef.current?.focus({ preventScroll: true })
@@ -352,7 +360,7 @@ function App({ remote }: { remote: ServerWorkspace }) {
   function markNotificationRead(notificationId: string) {
     const item = notifications.find((item) => item.id === notificationId && !item.read)
     if (!item) return
-    void remote.mutate(`/notifications/${encodeURIComponent(notificationId)}/read`, 'POST', {}).catch((error: Error) => setNotice(error.message))
+    void remote.mutate(`/notifications/${encodeURIComponent(notificationId)}/read`, 'POST', {}).then(() => setNotice('Уведомление отмечено прочитанным')).catch((error: Error) => setNotice(error.message))
   }
   function openNotification(notificationId: string) {
     const notification = notifications.find(
@@ -450,8 +458,8 @@ function App({ remote }: { remote: ServerWorkspace }) {
         />
         <main id="main" className="main-content" ref={mainRef} tabIndex={-1}>
           <section className={`server-bar ${remote.error ? 'server-bar-error' : ''}`} aria-label="Состояние подключения">
-            <p role={remote.error ? 'alert' : 'status'}>{remote.error || 'Данные кабинета сохраняются на сервере.'}</p>
-            <button disabled={remote.refreshing} onClick={() => void remote.refresh()}>{remote.refreshing ? 'Обновляем…' : 'Обновить данные'}</button>
+            <p role={remote.error ? 'alert' : undefined}><span className="sync-indicator" aria-hidden="true" />{remote.error || 'Данные обновлены'}</p>
+            <button aria-label={remote.refreshing ? 'Обновляем…' : 'Обновить данные'} disabled={remote.refreshing} onClick={() => void remote.refresh()}>{remote.refreshing ? 'Обновляем…' : 'Обновить'}</button>
           </section>
           {page === 'home' && role === 'employee' ? (
             <EmployeeHome
@@ -603,16 +611,14 @@ function App({ remote }: { remote: ServerWorkspace }) {
           )}
           <footer className="page-footer">
             <span>© 2026 JanaМен</span>
-            <span>Локальный стенд · все сотрудники вымышлены</span>
+            <span>Демонстрационный стенд · все сотрудники вымышлены</span>
             <span className="footer-company">
               Часть команды Jana Post <span>↗</span>
             </span>
           </footer>
         </main>
       </div>
-      <div className="sr-only" role="status" aria-live="polite">
-        {notice}
-      </div>
+      <FeedbackToast key={notice} message={notice} onDismiss={dismissNotice} />
       {overlay === 'menu' && (
         <Modal
           title="Меню"
@@ -664,6 +670,7 @@ function App({ remote }: { remote: ServerWorkspace }) {
             request={selectedRequest}
             employee={requestApplicant}
             isManager={role === 'manager'}
+            isHr={role === 'hr'}
             approvalBlockReason={
               selectedRequest.type === 'vacation' &&
               canReviewRequest(session, selectedRequest, workflow.employees)

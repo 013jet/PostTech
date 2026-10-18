@@ -3,13 +3,13 @@
   gap: 4px;
 }
 .demo-role-switch > span {
-  font-size: 8px;
+  font-size: 11px;
   color: #8c9a8d;
   letter-spacing: 0.4px;
 }
 .demo-role-switch select {
   font: inherit;
-  font-size: 11px;
+  font-size: 13px;
   color: #47724e;
   background: #f4f8f0;
   border: 1px solid #dce7d5;
@@ -23,11 +23,11 @@
   outline-offset: 3px;
 }
 .manager-sidebar-help p {
-  font-size: 11px;
+  font-size: 13px;
 }
 .manager-demo-label {
   display: inline-block;
-  font-size: 9px;
+  font-size: 11px;
   color: #7d9476;
   margin-top: 15px;
   padding: 5px 8px;
@@ -54,7 +54,7 @@
   border-color: #e1e9da;
 }
 .team-summary span {
-  font-size: 11px;
+  font-size: 13px;
   color: #82917b;
   line-height: 1.7;
 }
@@ -65,13 +65,13 @@
   margin: 13px 0 10px;
 }
 .team-summary small {
-  font-size: 10px;
+  font-size: 12px;
   color: #97a28e;
   line-height: 1.6;
 }
 .team-request-applicant {
   display: block;
-  font-size: 11px;
+  font-size: 13px;
   color: #6f8863;
   margin-top: 5px;
   line-height: 1.6;
@@ -93,7 +93,7 @@
   font-weight: 600;
 }
 .review-form-heading p {
-  font-size: 11px;
+  font-size: 13px;
   color: #8a997f;
   line-height: 1.8;
   margin-top: 5px;
@@ -117,7 +117,7 @@
   color: #809074;
   background: white;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
 }
 .decision-options label.decision-selected {
   color: #5d7c4b;
@@ -137,7 +137,7 @@
   border-radius: 8px;
   background: #fcf3ed;
   color: #9a6049;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
 }
 .decision-options .decision-reject.decision-selected {
@@ -154,11 +154,11 @@
 }
 .review-comment-label {
   display: block;
-  font-size: 12px;
+  font-size: 14px;
   color: #607a52;
 }
 .review-comment-label > span {
-  font-size: 10px;
+  font-size: 12px;
   color: #91a186;
   margin-left: 4px;
 }
@@ -174,7 +174,7 @@
   border-radius: 8px;
   background: white;
   font: inherit;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
   color: #536e49;
 }
@@ -190,7 +190,7 @@
   align-items: flex-start;
   gap: 15px;
   margin-top: 7px;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.8;
   color: #95a38b;
 }
@@ -205,7 +205,7 @@
   margin-top: 18px;
 }
 .review-submit-row > span {
-  font-size: 10px;
+  font-size: 12px;
   color: #95a18c;
 }
 .danger-button {
@@ -224,7 +224,7 @@
   margin-bottom: 24px;
   border-radius: 8px;
   color: #879579;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.8;
   background: #fafbf7;
 }
@@ -242,7 +242,7 @@
     gap: 2px;
   }
   .demo-role-switch select {
-    font-size: 10px;
+    font-size: 12px;
     max-width: 132px;
     padding: 6px 18px 6px 8px;
   }
@@ -254,20 +254,20 @@
     padding: 13px 10px;
   }
   .team-summary span {
-    font-size: 10px;
+    font-size: 12px;
   }
   .team-summary strong {
     font-size: 26px;
     margin: 10px 0 5px;
   }
   .team-summary small {
-    font-size: 9px;
+    font-size: 11px;
   }
   .review-form {
     padding: 16px;
   }
   .review-form-heading p {
-    font-size: 10px;
+    font-size: 12px;
   }
   .decision-options {
     gap: 8px;
@@ -287,7 +287,7 @@
 }
 
 .review-balance {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.8;
   color: #687d5c;
   margin-top: 16px;

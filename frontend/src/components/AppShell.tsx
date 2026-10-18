@@ -162,6 +162,7 @@ export function Header({
         <button
           className="icon-button mobile-menu"
           aria-label="Открыть меню"
+          aria-haspopup="dialog"
           onClick={onMenu}
         >
           <Icon name="menu" />
@@ -185,7 +186,7 @@ export function Header({
           onClick={onNotifications}
         >
           <Icon name="bell" size={21} />
-          {unreadCount > 0 && <span className="notification-dot" />}
+          {unreadCount > 0 && <span className="notification-count" aria-hidden="true">{unreadCount > 99 ? '99+' : unreadCount}</span>}
         </button>
         <span className="topbar-divider" />
         <button
@@ -198,7 +199,6 @@ export function Header({
             <strong>{employee.name}</strong>
             <small>{roleLabels[role]}</small>
           </span>
-          <Icon name="down" size={14} />
         </button>
       </div>
     </header>

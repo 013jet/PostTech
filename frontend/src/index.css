@@ -1,22 +1,26 @@
 :root {
   font-family: 'Segoe UI', Arial, sans-serif;
-  color: #24382e;
-  background: #f6f8f7;
+  color: #253b32;
+  background: #f3f6f4;
+  font-size: 15px;
+  line-height: 1.5;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --green: #217549;
-  --green-dark: #174f35;
-  --muted: #7b8680;
-  --line: #e9eeeb;
+  --green: #237b55;
+  --green-dark: #17543c;
+  --muted: #62736a;
+  --line: #e1e9e4;
+  --surface-shadow: 0 4px 20px #183d2910;
+  --surface-radius: 18px;
 }
 * {
   box-sizing: border-box;
 }
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
 }
 button,
 input,

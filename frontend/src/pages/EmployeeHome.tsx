@@ -57,14 +57,14 @@ export function EmployeeHome({
           <span className="banner-kicker">
             <span />
             {employee.vacationDays > 0
-              ? 'ВАШ БАЛАНС В ПОРЯДКЕ'
+              ? 'ВРЕМЯ ДЛЯ ВАШИХ ПЛАНОВ'
               : 'ДОСТУПНЫХ ДНЕЙ ПОКА НЕТ'}
           </span>
           <h2>
-            Большие планы начинаются
-            <br />с маленькой паузы.
+            Запланируйте свой отпуск
           </h2>
-          <p>Планируйте отдых, а мы поможем с оформлением.</p>
+          <p>Выберите даты — мы направим заявку вашему руководителю.</p>
+          <span className="welcome-mobile-balance">Доступно <strong>{formatCalendarDays(employee.vacationDays)}</strong></span>
           <button className="primary-button" onClick={onNewRequest}>
             <Icon name="plus" size={18} />
             Оформить отпуск

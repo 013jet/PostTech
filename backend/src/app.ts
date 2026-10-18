@@ -17,9 +17,10 @@ const keyHeaders = { type: 'object', properties: { 'idempotency-key': { type: 's
 const sessionCookie = 'janamen_session'
 const ttl = 12 * 60 * 60
 
-export async function buildApp(pool: Pool, options: { logger?: boolean; origins?: string[] } = {}) {
+export async function buildApp(pool: Pool, options: { logger?: boolean; origins?: string[]; hosts?: string[]; secureCookies?: boolean } = {}) {
   const app = Fastify({ logger: options.logger ?? false, bodyLimit: 16384, ajv: { customOptions: { removeAdditional: false } } })
   const origins = new Set(options.origins ?? (process.env.ALLOWED_ORIGINS || 'http://127.0.0.1:5173,http://localhost:5173,http://127.0.0.1:4173,http://localhost:4173').split(','))
+  const hosts = new Set(options.hosts ?? ['127.0.0.1', 'localhost'])
   await app.register(cookie)
   await app.register(rateLimit, { global: false })
   const dummyHash = await hashPassword(randomBytes(24).toString('hex'))
@@ -27,7 +28,7 @@ export async function buildApp(pool: Pool, options: { logger?: boolean; origins?
     reply.header('Cache-Control', 'no-store')
     reply.header('X-Content-Type-Options', 'nosniff')
     const host = request.headers.host?.split(':')[0]
-    if (host !== '127.0.0.1' && host !== 'localhost') fail(403, 'INVALID_HOST', 'Сервер доступен только локально.')
+    if (!host || !hosts.has(host.toLowerCase())) fail(403, 'INVALID_HOST', 'Этот адрес сервера не разрешён.')
     if (request.headers.origin && !origins.has(request.headers.origin)) fail(403, 'INVALID_ORIGIN', 'Этот источник запроса не разрешён.')
     if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method) && request.headers['x-janamen-request'] !== '1')
       fail(403, 'CSRF_REJECTED', 'Обновите страницу и повторите действие.')
@@ -62,12 +63,12 @@ export async function buildApp(pool: Pool, options: { logger?: boolean; origins?
     const token = randomBytes(32).toString('hex')
     await pool.query('DELETE FROM sessions WHERE expires_at <= now() OR token_hash = $1', [tokenHash(request.cookies[sessionCookie] || '')])
     await pool.query("INSERT INTO sessions(token_hash,user_id,expires_at) VALUES ($1,$2,now() + interval '12 hours')", [tokenHash(token), rows[0].id])
-    reply.setCookie(sessionCookie, token, { path: '/api', httpOnly: true, sameSite: 'strict', secure: false, maxAge: ttl })
+    reply.setCookie(sessionCookie, token, { path: '/api', httpOnly: true, sameSite: 'strict', secure: options.secureCookies ?? false, maxAge: ttl })
     return { ok: true }
   })
   app.post('/api/auth/logout', async (request, reply) => {
     await pool.query('DELETE FROM sessions WHERE token_hash = $1', [tokenHash(request.cookies[sessionCookie] || '')])
-    reply.clearCookie(sessionCookie, { path: '/api', httpOnly: true, sameSite: 'strict' })
+    reply.clearCookie(sessionCookie, { path: '/api', httpOnly: true, sameSite: 'strict', secure: options.secureCookies ?? false })
     return { ok: true }
   })
   app.get('/api/workspace', async (request) => snapshot(pool, await identity(request)))

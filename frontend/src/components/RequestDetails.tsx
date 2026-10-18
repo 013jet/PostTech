@@ -25,6 +25,7 @@ export function RequestDetails({
   employee,
   canReview = false,
   isManager = false,
+  isHr = false,
   onReview,
   canWithdraw = false,
   onWithdraw,
@@ -38,6 +39,7 @@ export function RequestDetails({
   employee: Employee
   canReview?: boolean
   isManager?: boolean
+  isHr?: boolean
   onReview?: (decision: ReviewDecision, comment: string) => Promise<string | null>
   canWithdraw?: boolean
   onWithdraw?: () => Promise<string | null>
@@ -50,7 +52,10 @@ export function RequestDetails({
   const statusRef = useRef<HTMLDivElement>(null)
   const previousStatus = useRef(request.status)
   useLayoutEffect(() => {
-    if (previousStatus.current !== request.status) statusRef.current?.focus()
+    if (previousStatus.current !== request.status) {
+      statusRef.current?.focus({ preventScroll: true })
+      statusRef.current?.scrollIntoView({ block: 'center', behavior: 'instant' })
+    }
     previousStatus.current = request.status
   }, [request.status])
   const history = [...request.history].sort(
@@ -82,6 +87,7 @@ export function RequestDetails({
             {request.id}
           </span>
           <h3>{request.title}</h3>
+          {(isManager || isHr) && <p className="request-owner">{employee.name} · {employee.department}</p>}
           <p>Создана {formatDate(request.createdAt)}</p>
         </div>
         <span className={`status-badge ${request.status}`}>
@@ -163,6 +169,14 @@ export function RequestDetails({
         </dl>
       )}
       {canReview && onReview && (
+        <div className="request-comment request-review-context">
+          <h3>Комментарий сотрудника</h3>
+          <p className={request.comment ? '' : 'comment-empty'}>
+            {request.comment || 'Комментарий не добавлен.'}
+          </p>
+        </div>
+      )}
+      {canReview && onReview && (
         <ReviewForm
           onReview={onReview}
           approvalBlockReason={approvalBlockReason}
@@ -202,6 +216,7 @@ export function RequestDetails({
               : 'Решение по этой заявке уже принято. Повторное рассмотрение недоступно.'}
         </p>
       )}
+      {isHr && <p className="review-readonly"><Icon name="shield" size={16} />Кадровый просмотр. Решение по отпуску принимает прямой руководитель сотрудника.</p>}
       <div className="request-detail-grid">
         <section
           className="request-information"
@@ -233,12 +248,12 @@ export function RequestDetails({
               <dd>{request.title}</dd>
             </div>
           </dl>
-          <div className="request-comment">
+          {!canReview && <div className="request-comment">
             <h3>Комментарий сотрудника</h3>
             <p className={request.comment ? '' : 'comment-empty'}>
               {request.comment || 'Комментарий не добавлен.'}
             </p>
-          </div>
+          </div>}
           <p className="read-only-note">
             <Icon name="shield" size={15} />
             Данные заявки доступны только для просмотра.

@@ -51,6 +51,7 @@ export function ProfilePage({
   const emailInput = useRef<HTMLInputElement>(null)
   const phoneInput = useRef<HTMLInputElement>(null)
   const editButton = useRef<HTMLButtonElement>(null)
+  const contactCard = useRef<HTMLElement>(null)
   const editorOpened = useRef(false)
   const fieldId = useId()
   const dirty =
@@ -59,8 +60,10 @@ export function ProfilePage({
 
   useLayoutEffect(() => {
     if (editing) emailInput.current?.focus()
-    else if (editorOpened.current)
+    else if (editorOpened.current) {
       editButton.current?.focus({ preventScroll: true })
+      contactCard.current?.scrollIntoView({ block: 'start', behavior: 'instant' })
+    }
   }, [editing])
 
   useLayoutEffect(() => {
@@ -83,10 +86,6 @@ export function ProfilePage({
     setSaveError('')
     if (touched[field])
       setErrors((current) => ({ ...current, [field]: getErrors(next)[field] }))
-  }
-  function blur(field: keyof ProfileContacts) {
-    setTouched((current) => ({ ...current, [field]: true }))
-    setErrors((current) => ({ ...current, [field]: getErrors(draft)[field] }))
   }
   function edit() {
     setDraft({
@@ -182,6 +181,7 @@ export function ProfilePage({
           </p>
         </section>
         <section
+          ref={contactCard}
           className={`panel profile-data-card profile-contact-card ${editing ? 'is-editing' : ''}`}
           aria-labelledby={`${fieldId}-contacts`}
         >
@@ -217,6 +217,7 @@ export function ProfilePage({
               onSubmit={submit}
               noValidate
               aria-label="Редактирование контактов"
+              aria-busy={busy}
             >
               <p className="profile-form-description">
                 Оба поля обязательны. Изменения применятся после сохранения.
@@ -230,6 +231,7 @@ export function ProfilePage({
                   name="email"
                   type="email"
                   autoComplete="email"
+                  disabled={busy}
                   ref={emailInput}
                   value={draft.email}
                   required
@@ -237,7 +239,6 @@ export function ProfilePage({
                   aria-invalid={Boolean(errors.email)}
                   aria-describedby={`${fieldId}-email-hint${errors.email ? ` ${fieldId}-email-error` : ''}`}
                   onChange={(event) => change('email', event.target.value)}
-                  onBlur={() => blur('email')}
                 />
                 <small id={`${fieldId}-email-hint`}>
                   Например, name@example.com
@@ -260,6 +261,7 @@ export function ProfilePage({
                   name="phone"
                   type="tel"
                   autoComplete="tel"
+                  disabled={busy}
                   ref={phoneInput}
                   value={draft.phone}
                   required
@@ -267,7 +269,6 @@ export function ProfilePage({
                   aria-invalid={Boolean(errors.phone)}
                   aria-describedby={`${fieldId}-phone-hint${errors.phone ? ` ${fieldId}-phone-error` : ''}`}
                   onChange={(event) => change('phone', event.target.value)}
-                  onBlur={() => blur('phone')}
                 />
                 <small id={`${fieldId}-phone-hint`}>
                   +7 (700) 000-00-01 · также можно начать с 8
@@ -290,6 +291,7 @@ export function ProfilePage({
                 <button
                   type="button"
                   className="profile-cancel-button"
+                  disabled={busy}
                   onClick={() => {
                     setEditing(false)
                     setDraft({
@@ -306,7 +308,7 @@ export function ProfilePage({
                   disabled={!dirty || busy}
                 >
                   <Icon name="check" size={16} />
-                  Сохранить контакты
+                  {busy ? 'Сохраняем…' : 'Сохранить контакты'}
                 </button>
               </div>
               <p className="profile-form-demo">

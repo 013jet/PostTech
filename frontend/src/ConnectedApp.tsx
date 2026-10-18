@@ -69,6 +69,7 @@ export default function ConnectedApp() {
 function Login({ error: connectionError, refreshing, refresh }: { error: string; refreshing: boolean; refresh: () => Promise<boolean> }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const guard = useRef(false)
@@ -77,7 +78,11 @@ function Login({ error: connectionError, refreshing, refresh }: { error: string;
     if (guard.current) return
     guard.current = true; setBusy(true); setError('')
     try { await api('/auth/login', 'POST', { email, password }); setPassword(''); await refresh() }
-    catch (caught) { setError((caught as Error).message) }
+    catch (caught) {
+      setError(caught instanceof ApiError && caught.code === 'INVALID_CREDENTIALS'
+        ? 'Неверный email или пароль. Проверьте раскладку клавиатуры и лишние пробелы.'
+        : (caught as Error).message)
+    }
     finally { guard.current = false; setBusy(false) }
   }
   return (
@@ -94,13 +99,35 @@ function Login({ error: connectionError, refreshing, refresh }: { error: string;
         <h2 id="login">Вход в кабинет</h2>
         <p>Войдите под своей учётной записью.</p>
         <form onSubmit={submit}>
-          <label>Email<input type="email" autoComplete="username" value={email} onChange={(event) => { setEmail(event.target.value); setError('') }} maxLength={254} required /></label>
-          <label>Пароль<input type="password" autoComplete="current-password" value={password} onChange={(event) => { setPassword(event.target.value); setError('') }} maxLength={128} required /></label>
+          <label>Email<input type="email" autoComplete="username" disabled={busy} value={email} onChange={(event) => { setEmail(event.target.value); setError('') }} maxLength={254} required /></label>
+          <div className="auth-password-group">
+            <label htmlFor="login-password">Пароль</label>
+            <span className="auth-password-field">
+              <input id="login-password" type={showPassword ? 'text' : 'password'} autoComplete="current-password" disabled={busy} value={password} onChange={(event) => { setPassword(event.target.value); setError('') }} maxLength={128} aria-describedby={password !== password.trim() ? 'password-spaces-hint' : undefined} required />
+              <button type="button" className="auth-password-toggle" disabled={busy} aria-label={showPassword ? 'Скрыть пароль' : 'Показать пароль'} aria-controls="login-password" aria-pressed={showPassword} onClick={() => setShowPassword((shown) => !shown)}>{showPassword ? 'Скрыть' : 'Показать'}</button>
+            </span>
+          </div>
+          {password !== password.trim() && <p id="password-spaces-hint" className="auth-input-hint" role="status">В начале или конце пароля есть пробел. Проверьте его перед входом.</p>}
           {(error || connectionError) && <p className="form-error" role="alert">{error || connectionError}</p>}
           <button type="submit" className="primary-button full-width" disabled={busy || refreshing}>{busy ? 'Входим…' : 'Войти'}</button>
           {connectionError && <button type="button" className="withdraw-secondary" disabled={refreshing} onClick={() => void refresh()}>Проверить подключение</button>}
         </form>
-        <p className="auth-note">Локальный стенд · используются вымышленные сотрудники.</p>
+        {import.meta.env.DEV && (
+          <section className="auth-test-accounts" aria-labelledby="test-accounts-title">
+            <h3 id="test-accounts-title">Тестовые аккаунты</h3>
+            <p>Выберите аккаунт — email и пароль заполнятся. Затем нажмите «Войти».</p>
+            <div className="auth-test-account-list">
+              {[
+                { email: 'employee@janamen.local', label: 'Сотрудник — Айдана' },
+                { email: 'manager@janamen.local', label: 'Руководитель — Данияр' },
+                { email: 'hr@janamen.local', label: 'HR — Мадина' },
+              ].map((account) => (
+                <button key={account.email} type="button" disabled={busy || refreshing} onClick={() => { setEmail(account.email); setPassword('JanaLocal2026!'); setShowPassword(false); setError('') }}>{account.label}</button>
+              ))}
+            </div>
+          </section>
+        )}
+        <p className="auth-note">Демонстрационный стенд · используются вымышленные сотрудники.</p>
       </section>
     </main>
   )

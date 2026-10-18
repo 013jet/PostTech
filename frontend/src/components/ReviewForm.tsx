@@ -20,17 +20,21 @@ export function ReviewForm({
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const sending = useRef(false)
+  const decisionField = useRef<HTMLFieldSetElement>(null)
+  const commentField = useRef<HTMLTextAreaElement>(null)
   const fieldId = useId()
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (sending.current) return
     if (!decision) {
       setError('Выберите решение по отпуску.')
+      decisionField.current?.querySelector<HTMLInputElement>('input:not(:disabled)')?.focus()
       return
     }
     if (decision === 'approved' && approvalBlockReason) return
     if (!comment.trim()) {
       setError('Добавьте комментарий к решению.')
+      commentField.current?.focus()
       return
     }
     if (comment.trim().length > 500) {
@@ -70,11 +74,13 @@ export function ReviewForm({
         </p>
       )}
       <fieldset
+        ref={decisionField}
         className="decision-options"
         disabled={busy}
-        aria-describedby={
-          approvalBlockReason ? `${fieldId}-conflict` : undefined
-        }
+        aria-describedby={[
+          approvalBlockReason ? `${fieldId}-conflict` : '',
+          error && !decision ? `${fieldId}-error` : '',
+        ].filter(Boolean).join(' ') || undefined}
       >
         <legend className="sr-only">Решение по отпуску</legend>
         <label
@@ -116,6 +122,7 @@ export function ReviewForm({
         Комментарий к решению <span>обязательно</span>
       </label>
       <textarea
+        ref={commentField}
         disabled={busy}
         id={fieldId}
         className="review-comment"
@@ -125,7 +132,7 @@ export function ReviewForm({
           setError('')
         }}
         aria-required="true"
-        aria-invalid={Boolean(error && !comment.trim())}
+        aria-invalid={Boolean(error && decision && !comment.trim())}
         aria-describedby={`${fieldId}-help${error ? ` ${fieldId}-error` : ''}`}
         maxLength={500}
         rows={3}

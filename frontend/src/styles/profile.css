@@ -28,7 +28,7 @@
   color: #59804b;
 }
 .profile-overview .eyebrow {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: 1.3px;
 }
 .profile-overview h2 {
@@ -37,7 +37,7 @@
   line-height: 1.5;
 }
 .profile-overview-person p {
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.7;
   color: #63775b;
   margin-top: 3px;
@@ -46,7 +46,7 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 10px;
+  font-size: 12px;
   color: #7e8d72;
   margin-top: 9px;
 }
@@ -55,7 +55,7 @@
   justify-items: end;
   gap: 10px;
   color: #718069;
-  font-size: 10px;
+  font-size: 12px;
 }
 .profile-overview-meta strong {
   color: #456541;
@@ -63,14 +63,14 @@
   margin-left: 6px;
 }
 .profile-overview-meta small {
-  font-size: 10px;
+  font-size: 12px;
 }
 .profile-role-tag {
   padding: 6px 10px;
   border-radius: 6px;
   background: #fff9;
   color: #547448;
-  font-size: 10px;
+  font-size: 12px;
 }
 .profile-detail-grid {
   display: grid;
@@ -109,7 +109,7 @@
   line-height: 1.6;
 }
 .profile-card-heading p {
-  font-size: 10px;
+  font-size: 12px;
   color: #8a9681;
   line-height: 1.7;
   margin-top: 3px;
@@ -120,7 +120,7 @@
   gap: 4px;
   margin-left: auto;
   color: #8e9a88;
-  font-size: 9px;
+  font-size: 11px;
 }
 .profile-detail-fields {
   display: grid;
@@ -136,12 +136,12 @@
 .profile-detail-fields dt,
 .profile-contact-values dt {
   color: #87947e;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.6;
   margin-bottom: 8px;
 }
 .profile-detail-fields dd {
-  font-size: 12px;
+  font-size: 14px;
   color: #415b3d;
   line-height: 1.8;
   margin: 0;
@@ -153,7 +153,7 @@
   gap: 7px;
   border-top: 1px solid #edf1e9;
   padding: 16px 23px;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.8;
   color: #8b9682;
   background: #fcfdfb;
@@ -174,7 +174,7 @@
   background: transparent;
   border: 0;
   padding: 8px 0 8px 6px;
-  font-size: 10px;
+  font-size: 12px;
   color: #60824e;
   margin-left: auto;
 }
@@ -194,7 +194,7 @@
   gap: 9px;
   align-items: center;
   color: #536e48;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.7;
   margin: 0;
   overflow-wrap: anywhere;
@@ -206,7 +206,7 @@
   padding: 20px 23px;
 }
 .profile-form-description {
-  font-size: 11px;
+  font-size: 13px;
   color: #819175;
   line-height: 1.8;
   margin-bottom: 19px;
@@ -217,7 +217,7 @@
   gap: 7px;
 }
 .profile-input-field label {
-  font-size: 11px;
+  font-size: 13px;
   color: #56704d;
 }
 .profile-input-field label > span {
@@ -232,7 +232,7 @@
   padding: 11px 12px;
   color: #375435;
   background: #fff;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.5;
 }
 .profile-input-field input[aria-invalid='true'] {
@@ -240,13 +240,13 @@
   background: #fffaf8;
 }
 .profile-input-field small {
-  font-size: 9px;
+  font-size: 11px;
   color: #8a9682;
   line-height: 1.7;
 }
 .profile-field-error {
   color: #a45c49;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.8;
 }
 .profile-form-actions {
@@ -260,7 +260,7 @@
   border-top: 1px solid var(--line);
 }
 .profile-form-actions .primary-button {
-  font-size: 11px;
+  font-size: 13px;
   padding: 11px 13px;
 }
 .profile-cancel-button {
@@ -268,13 +268,13 @@
   border: 0;
   background: transparent;
   color: #7f8d74;
-  font-size: 11px;
+  font-size: 13px;
 }
 .profile-cancel-button:hover {
   color: #426836;
 }
 .profile-form-demo {
-  font-size: 9px;
+  font-size: 11px;
   color: #929b88;
   line-height: 1.8;
   margin-top: 14px;
@@ -288,7 +288,7 @@
   background: #edf5e8;
   border: 1px solid #dbe8d3;
   color: #5a7a48;
-  font-size: 11px;
+  font-size: 13px;
   padding: 10px;
   line-height: 1.7;
 }

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-18",
+  "url": "https://posttech.vercel.app",
+  "method": "End-to-end UI verification with employee demonstration account at mobile CSS viewport sizes",
+  "viewports": [{"width":390,"height":844},{"width":360,"height":640}],
+  "result": "passed",
+  "checks": [
+    "Personal and employment information render on the mobile profile; only contact email and phone are editable",
+    "Save is disabled until contact values change",
+    "Both empty fields produce separate required-field errors and aria-invalid=true; first invalid field receives focus",
+    "Email with consecutive dots and phone containing letters are rejected with field-specific messages",
+    "Cancel discards invalid drafts and retains original saved contacts",
+    "Valid temporary contact email with surrounding spaces and uppercase domain saves as aidana.mobile@example.com",
+    "Valid phone starting with 8 saves in canonical +7 format and displays as +7 (700) 000-02-26",
+    "Save shows success feedback and exits editing mode",
+    "Temporary saved contacts persist after page reload",
+    "Personal and employment sections remain identical after contact save, including work email and 16-day vacation balance",
+    "Both inputs use 16px font, email/tel types and corresponding autocomplete attributes",
+    "Original employee contacts were restored through the form and verified after another reload"
+  ],
+  "temporaryContacts": {"email":"aidana.mobile@example.com","phone":"+77000000226"},
+  "restoredContacts": {"email":"employee@janamen.local","phone":"+77000000002"},
+  "screenshot": "saved-after-reload-360.png",
+  "codeChanges": false,
+  "redeployed": false,
+  "reason": "No application defect found in verified profile scenarios",
+  "githubPush": false,
+  "limits": ["Responsive browser verification, not a physical iOS/Android device or on-screen keyboard test", "Contact input values are masked by the browser-control tool; restoration used original values observed in the profile display"],
+  "cleanup": "Original contacts restored and verified after reload; viewport override reset"
+}

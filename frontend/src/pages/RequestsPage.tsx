@@ -1,3 +1,4 @@
+import { useId, useRef, useState } from 'react'
 import { Icon } from '../components/Icon'
 import { formatDate, statusLabels } from '../mocks/dashboard'
 import type { Employee, EmployeeRequest, RequestFilter } from '../types'
@@ -28,8 +29,18 @@ export function RequestsPage({
   mode?: 'personal' | 'team' | 'hr'
   employees?: Employee[]
 }) {
+  const [query, setQuery] = useState('')
+  const searchId = useId()
+  const searchRef = useRef<HTMLInputElement>(null)
+  const search = query.trim().toLocaleLowerCase('ru')
   const filtered = requests
     .filter((request) => filter === 'all' || request.status === filter)
+    .filter(request => {
+      if (!search) return true
+      const person = employees.find(person => person.id === request.employeeId)?.name || ''
+      const dates = request.type === 'vacation' ? `${request.startDate} ${request.endDate} ${formatDate(request.startDate)} ${formatDate(request.endDate)}` : request.description
+      return `${request.id} ${request.title} ${person} ${dates}`.toLocaleLowerCase('ru').includes(search)
+    })
     .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
 
   return (
@@ -39,6 +50,16 @@ export function RequestsPage({
         mode === 'hr' ? 'Список заявок компании' : mode === 'team' ? 'Список заявок команды' : 'Список моих заявок'
       }
     >
+      <div className="request-search-toolbar">
+        <div className="request-search-field">
+          <label className="sr-only" htmlFor={searchId}>Поиск заявок</label>
+          <Icon name="search" size={19} />
+          <input id={searchId} ref={searchRef} type="search" value={query} onChange={event => setQuery(event.target.value)}
+            placeholder={mode === 'personal' ? 'Номер заявки или даты' : 'Номер, сотрудник или даты'} />
+          {query && <button type="button" className="icon-button" aria-label="Очистить поиск заявок" onClick={() => { setQuery(''); searchRef.current?.focus() }}><Icon name="close" size={17} /></button>}
+        </div>
+        <span>Найдите нужную заявку за пару секунд</span>
+      </div>
       <div
         className="request-filters"
         role="group"
@@ -142,14 +163,14 @@ export function RequestsPage({
             <Icon name="file" size={28} />
           </span>
           <h2>
-            {requests.length === 0
+            {search ? 'Ничего не найдено' : requests.length === 0
               ? mode !== 'personal'
                 ? 'Пока нет заявок'
                 : 'У вас пока нет заявок'
               : 'Заявок с таким статусом пока нет'}
           </h2>
           <p>
-            {requests.length === 0
+            {search ? 'Попробуйте другой номер, даты или сбросьте фильтры.' : requests.length === 0
               ? mode !== 'personal'
                 ? 'Заявки появятся здесь, когда сотрудники отправят обращения.'
                 : 'Создайте первую заявку на отпуск — она появится здесь вместе с историей изменений.'
@@ -161,10 +182,10 @@ export function RequestsPage({
                 requests.length === 0 ? 'primary-button' : 'secondary-button'
               }
               onClick={
-                requests.length === 0 ? onNewRequest : () => onFilter('all')
+                requests.length === 0 ? onNewRequest : () => { setQuery(''); onFilter('all') }
               }
             >
-              {requests.length === 0 ? 'Создать заявку' : 'Показать все заявки'}
+              {requests.length === 0 ? 'Создать заявку' : search ? 'Сбросить фильтры' : 'Показать все заявки'}
               <Icon name="arrow" size={16} />
             </button>
           )}

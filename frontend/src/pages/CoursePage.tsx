@@ -34,6 +34,14 @@ export function CoursePage({
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
   const sending = useRef(false)
+  const [missingAnswer, setMissingAnswer] = useState<{ id: string } | null>(null)
+  const questionFields = useRef<Record<string, HTMLFieldSetElement | null>>({})
+  useLayoutEffect(() => {
+    if (!missingAnswer) return
+    const field = questionFields.current[missingAnswer.id]
+    field?.scrollIntoView({ block: 'start', behavior: 'instant' })
+    field?.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true })
+  }, [missingAnswer])
   const [outlineOpen, setOutlineOpen] = useState(
     () => window.matchMedia('(min-width: 701px)').matches,
   )
@@ -59,6 +67,7 @@ export function CoursePage({
   function selectStep(step: string) {
     setActiveStep(step)
     setError('')
+    setMissingAnswer(null)
     if (window.matchMedia('(max-width: 700px)').matches) setOutlineOpen(false)
     focusReader()
   }
@@ -70,12 +79,23 @@ export function CoursePage({
     try {
       const message = await action()
       setError(message || '')
-      if (!message) after?.()
-    } catch { setError('Не удалось сохранить изменения. Повторите попытку.') }
+      if (message) focusReader()
+      else after?.()
+    } catch {
+      setError('Не удалось сохранить изменения. Повторите попытку.')
+      focusReader()
+    }
     finally { sending.current = false; setBusy(false) }
   }
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const missing = course.quiz.questions.find(question => !enrollment.answers[question.id])
+    if (missing) {
+      setError('')
+      setMissingAnswer({ id: missing.id })
+      return
+    }
+    setMissingAnswer(null)
     void perform(onSubmitQuiz, focusReader)
   }
 
@@ -241,7 +261,7 @@ export function CoursePage({
                   <Icon name="check" size={17} />
                   {lessonDone
                     ? 'Материал пройден'
-                    : 'Отметить материал пройденным'}
+                    : 'Завершить материал'}
                 </button>
                 {lessonDone && (
                   <button
@@ -286,11 +306,14 @@ export function CoursePage({
               </div>
               <form onSubmit={submit} noValidate aria-label="Итоговый тест">
                 {course.quiz.questions.map((question, index) => (
-                  <fieldset className="quiz-question" key={question.id} disabled={busy}>
+                  <fieldset className="quiz-question" key={question.id} disabled={busy}
+                    ref={node => { questionFields.current[question.id] = node }}
+                    aria-describedby={missingAnswer?.id === question.id ? `${course.id}-${question.id}-error` : undefined}>
                     <legend>
                       <span>{String(index + 1).padStart(2, '0')}</span>
                       {question.text}
                     </legend>
+                    {missingAnswer?.id === question.id && <p className="form-error" role="alert" id={`${course.id}-${question.id}-error`}>Выберите ответ на этот вопрос.</p>}
                     <div className="quiz-options">
                       {question.options.map((option) => (
                         <label
@@ -308,6 +331,7 @@ export function CoursePage({
                               enrollment.answers[question.id] === option.id
                             }
                             onChange={() => {
+                              if (missingAnswer?.id === question.id) setMissingAnswer(null)
                               void perform(() => onAnswer(question.id, option.id))
                             }}
                           />
@@ -318,7 +342,7 @@ export function CoursePage({
                   </fieldset>
                 ))}
                 <div className="quiz-submit-row">
-                  <span>
+                  <span role="status" aria-live="polite" aria-atomic="true">
                     Отвечено:{' '}
                     {
                       course.quiz.questions.filter(

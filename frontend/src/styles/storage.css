@@ -14,7 +14,7 @@
   display: flex;
   align-items: flex-start;
   gap: 7px;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.8;
 }
 .demo-storage-bar p svg {
@@ -31,7 +31,7 @@
   background: none;
   border: 0;
   padding: 4px 0;
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.7;
   color: #6a805c;
   text-align: left;
@@ -52,12 +52,12 @@
   margin-left: 22px;
 }
 .demo-reset-description {
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.9;
   color: #6c7f65;
 }
 .demo-reset-description + p {
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.8;
   color: #88937e;
   margin-top: 12px;
@@ -74,7 +74,7 @@
   border: 0;
   color: #7c8c70;
   padding: 9px 4px;
-  font-size: 12px;
+  font-size: 14px;
 }
 @media (max-width: 600px) {
   .demo-storage-bar {

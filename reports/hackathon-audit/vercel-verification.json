@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-18",
+  "productionUrl": "https://posttech.vercel.app",
+  "deploymentId": "dpl_C6jf8cgrmtA6BmzKZGJ7KAfCmvd2",
+  "architecture": "Vite static frontend + Fastify via api/index.mjs Node.js Function + Neon PostgreSQL",
+  "data": "Separate new cloud database containing fictional demonstration employees. Local database was not uploaded.",
+  "plans": { "vercel": "Hobby", "neon": "free_v3" },
+  "automatedChecks": {
+    "frontendTests": { "passed": 75, "failed": 0 },
+    "backendTests": { "passed": 30, "failed": 0 },
+    "requirementsTests": { "passed": 8, "failed": 0 },
+    "frontendBuild": "passed",
+    "backendBuild": "passed",
+    "cloudBundleBuild": "passed",
+    "frontendLint": { "exitCode": 0, "warnings": 7, "details": "Existing React Fast Refresh exports and hook/effect warnings; not a lint-clean certification." }
+  },
+  "publicHttpChecks": { "health": 200, "anonymousWorkspace": 401 },
+  "browserChecks": [
+    "Employee, manager and HR sign-in succeeded on the production URL",
+    "Employee created JP-1001 for 2026-11-16 and JP-1002 for 2026-11-17",
+    "Manager approved JP-1001 with comment; history contains approval; repeated decision unavailable",
+    "Rejection of JP-1002 without comment was blocked with a visible validation message",
+    "Manager rejected JP-1002 with comment; history contains rejection",
+    "HR saw both final statuses; both remained after page reload",
+    "Employee saw both decisions after fresh sign-in and page reload",
+    "Employee balance changed from 18 to 17 only for approval and remained 17 after reload",
+    "Employee received both decision notifications, including manager comments; notifications remained after reload",
+    "Academy course list and employee profile opened successfully",
+    "AI Jana answered a supported question with a source and refused an unsupported question"
+  ],
+  "screenshots": ["vercel-home.png", "vercel-notifications.png"],
+  "limits": [
+    "Demonstration accounts use the documented demonstration password; no real employee data",
+    "AI Jana is a local knowledge-base demo, not an external AI model",
+    "1C:ZUP and Documentolog integrations are planned, not connected",
+    "Full Academy completion and contact editing were covered by automated regression tests, not repeated through the hosted UI in this release check"
+  ],
+  "githubPush": false
+}

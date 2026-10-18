@@ -209,7 +209,10 @@ export function NotificationsPage({
               : 'Здесь появятся события по вашим заявкам и обучению.'}
           </p>
           {filter === 'unread' && (
-            <button className="notice-open" onClick={() => onFilter('all')}>
+            <button className="notice-open" onClick={() => {
+              onFilter('all')
+              allFilterRef.current?.focus()
+            }}>
               Показать все уведомления
               <Icon name="arrow" size={16} />
             </button>
